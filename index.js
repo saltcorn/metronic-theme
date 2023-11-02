@@ -341,9 +341,10 @@ const configuration_workflow = () =>
     ],
   });
 
+  //every saltcorn module has this
 module.exports = {
   sc_plugin_api_version: 1,
-  layout,
+  layout, //main function we are exporting
   configuration_workflow,
   plugin_name: "metronic-theme",
 };
