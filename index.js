@@ -159,8 +159,9 @@ const authBrand = (config, { name, logo }) =>
     : "";
 
 const layout = (config) => ({
-  wrap: ({ title, menu, brand, alerts, currentUrl, body, headers, role }) =>
-    wrapIt(
+  wrap: ({ title, menu, brand, alerts, currentUrl, body, headers, role }) => {
+    //console.log(menu)
+    return wrapIt(
       config,
       'id="page-top"',
       headers,
@@ -177,7 +178,8 @@ const layout = (config) => ({
         </div>
     </div>
     `
-    ),
+    );
+  },
   renderBody: ({ title, body, alerts, role }) =>
     renderBody(title, body, alerts, config, role),
   authWrap: ({
@@ -341,7 +343,7 @@ const configuration_workflow = () =>
     ],
   });
 
-  //every saltcorn module has this
+//every saltcorn module has this
 module.exports = {
   sc_plugin_api_version: 1,
   layout, //main function we are exporting
