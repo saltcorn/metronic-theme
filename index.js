@@ -126,7 +126,7 @@ const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <!-- Material Design Bootstrap -->
-    <link href="/plugins/public/material-design${verstring}/css/mdb.min.css" rel="stylesheet">
+    <link href="/plugins/public/metronic-theme${verstring}/css/mdb.min.css" rel="stylesheet">
 
     ${headersInHead(headers)}    
     <title>${text(title)}</title>
@@ -138,7 +138,7 @@ const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
             crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
     <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="/plugins/public/material-design${verstring}/js/mdb.min.js"></script>
+    <script type="text/javascript" src="/plugins/public/metronic-theme${verstring}/js/mdb.min.js"></script>
 
     ${headersInBody(headers)}
     ${config.colorscheme === "navbar-light" ? navbarSolidOnScroll : ""}
