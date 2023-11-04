@@ -121,8 +121,11 @@ const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700">
+    <!-- Vendor stylesheets -->
+    <link href="/metronic8/demo23/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css">
+    <link href="/metronic8/demo23/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css">
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <!-- Material Design Bootstrap -->
@@ -160,7 +163,7 @@ const authBrand = (config, { name, logo }) =>
 
 const layout = (config) => ({
   wrap: ({ title, menu, brand, alerts, currentUrl, body, headers, role }) => {
-    //console.log(menu)
+    console.log(menu)
     return wrapIt(
       config,
       'id="page-top"',

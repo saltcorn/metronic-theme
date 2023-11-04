@@ -1,2 +1,2 @@
 # metronic-theme
-Metronic theme fro Saltcorn
+Metronic theme for Saltcorn
