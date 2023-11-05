@@ -124,15 +124,15 @@ const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
     <!-- Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700">
     <!-- Vendor Stylesheets -->
-		<link href="/saltcorn/metronic-theme/public/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="/saltcorn/metronic-theme/public/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+		<link href="/saltcorn/plugin-packages/metronic-theme/public/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+		<link href="/saltcorn/plugin-packages/metronic-theme/public/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 		<!--Global Stylesheets Bundle-->
-		<link href="/saltcorn/metronic-theme/public/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="/saltcorn/metronic-theme/public/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+		<link href="/saltcorn/plugin-packages/metronic-theme/public/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+		<link href="/saltcorn/plugin-packages/metronic-theme/public/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <!-- Material Design Bootstrap -->
-    <link href="/saltcorn/metronic-theme${verstring}/css/mdb.min.css" rel="stylesheet">
+    <link href="/plugins/public/metronic-theme${verstring}/css/mdb.min.css" rel="stylesheet">
 
     ${headersInHead(headers)}    
     <title>${text(title)}</title>
