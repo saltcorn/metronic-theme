@@ -123,13 +123,26 @@ const renderBody = (title, body, alerts, config, role) =>
   });
 
 const sidebar = (brand, sections, currentUrl) =>
-  aside(
-    { class: "main-sidebar sidebar-bg-dark sidebar-color-primary shadow" },
+  div(
+    {
+      id: "kt_aside",
+      class: "aside pt-7 pb-4 pb-lg-7 pt-lg-17",
+      //"data-kt-drawer": "true",
+      "data-kt-drawer-name": "aside",
+      "data-kt-drawer-activate": "{default: true, lg: false}",
+      "data-kt-drawer-overlay": "true",
+      "data-kt-drawer-width": "{default:'200px', '300px': '250px'}",
+      "data-kt-drawer-direction": "start",
+      "data-kt-drawer-toggle": "#kt_aside_toggle",
+      style: "",
+    },
     div(
-      { class: "brand-container" },
+      {
+        class: "aside-logo flex-column-auto px-9 mb-9 mb-lg-17 mx-auto",
+        id: "kt_aside_logo",
+      },
       a(
         {
-          class: "brand-link",
           href: "/",
         },
         brand.logo &&
@@ -137,47 +150,47 @@ const sidebar = (brand, sections, currentUrl) =>
             src: brand.logo,
             width: "30",
             height: "30",
-            class: "brand-image opacity-75 shadow",
+            class: "h-30px logo theme-light-show",
             alt: "Logo",
             loading: "lazy",
           }),
-        span({ class: "brand-text font-weight-light" }, brand.name)
-      ),
-      a(
-        {
-          class: "pushmenu mx-1",
-          "data-lte-toggle": "sidebar-mini",
-          href: "javascript:;",
-          role: "button",
-        },
-        i({ class: "fas fa-angle-double-left" })
+        span({ class: "logo" }, brand.name)
       )
     ),
     div(
-      { class: "sidebar" },
-      nav(
-        { class: "mt-2" },
-        ul(
+      {
+        class: "aside-menu flex-column-fluid ps-3 ps-lg-5 pe-1 mb-9",
+        id: "kt_aside_menu",
+      },
+      div(
+        {
+          class: "w-100 hover-scroll-y pe-2 me-2",
+          id: "kt_aside_menu_wrapper",
+          "data-kt-scroll": "true",
+          "data-kt-scroll-activate": "{default: false, lg: true}",
+          "data-kt-scroll-height": "auto",
+          "data-kt-scroll-dependencies":
+            "#kt_aside_logo, #kt_aside_user, #kt_aside_footer",
+          "data-kt-scroll-wrappers":
+            "#kt_aside, #kt_aside_menu, #kt_aside_menu_wrapper",
+          "data-kt-scroll-offset": "0",
+          style: "height: 81px;",
+        },
+
+        div(
           {
-            class: "nav nav-pills nav-sidebar flex-column",
-            "data-lte-toggle": "treeview",
-            role: "menu",
-            "data-accordion": "false",
-            id: "accordionSidebar",
+            class:
+              "menu menu-column menu-rounded menu-sub-indention fw-semibold",
+            id: "#kt_aside_menu",
+            "data-kt-menu": "true",
           },
           sections.map(sideBarSection(currentUrl))
         )
       )
     )
   );
-
 const sideBarSection = (currentUrl) => (section) =>
-  [
-    section.section &&
-      section.section !== "Menu" &&
-      li({ class: "nav-header" }, section.section),
-    section.items.map(sideBarItem(currentUrl)).join(""),
-  ];
+   section.items.map(sideBarItem(currentUrl)).join("");
 
 const sideBarItem = (currentUrl) => (item) => {
   const is_active = active(currentUrl, item);
@@ -307,7 +320,7 @@ const layout = (config) => ({
       'id="page-top"',
       headers,
       title,
-    //this represents the body  
+      //this represents the body
       `
     <div class="d-flex flex-column flex-root">
       <div class="page d-flex flex-row flex-column-fluid">
@@ -494,7 +507,3 @@ module.exports = {
   configuration_workflow,
   plugin_name: "metronic-theme",
 };
-
-
-
-        
