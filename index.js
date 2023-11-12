@@ -174,7 +174,7 @@ const sidebar = (brand, sections, currentUrl) =>
           "data-kt-scroll-wrappers":
             "#kt_aside, #kt_aside_menu, #kt_aside_menu_wrapper",
           "data-kt-scroll-offset": "0",
-          style: "height: 81px;",
+          style: "height: 810px;",
         },
 
         div(
@@ -190,26 +190,29 @@ const sidebar = (brand, sections, currentUrl) =>
     )
   );
 const sideBarSection = (currentUrl) => (section) =>
-   section.items.map(sideBarItem(currentUrl)).join("");
+  section.items.map(sideBarItem(currentUrl)).join("");
 
+//change here and adapt such that it looks like sidebar on Metronic but with elements from Tritac
 const sideBarItem = (currentUrl) => (item) => {
   const is_active = active(currentUrl, item);
-  return li(
+  return div(
     {
+      "data-kt-menu-trigger": "click",
       class: [
-        "nav-item",
+        "menu-item menu-accordion",
         item.subitems && is_active && "menu-open",
-        item.isUser && "admlte-user-navbar",
+        item.isUser && "aside-footer flex-column-auto px-6 px-lg-9",
       ],
+      id: "kt_aside_footer",
     },
     item.link
       ? a(
           {
-            class: ["nav-link", is_active && "active"],
+            class: ["menu-link", is_active && "active"],
             href: text(item.link),
             target: item.target_blank ? "_blank" : undefined,
           },
-          item.icon ? i({ class: `nav-icon ${item.icon}` }) : "",
+          item.icon ? i({ class: `menu-icon ${item.icon}` }) : "",
 
           p(text(item.label))
         )
@@ -217,31 +220,31 @@ const sideBarItem = (currentUrl) => (item) => {
       ? [
           a(
             {
-              class: ["nav-link", is_active && "active"],
+              class: ["menu-link", is_active && "active"],
               href: "javascript:;",
             },
-            item.icon ? i({ class: `nav-icon ${item.icon}` }) : "",
-            p(text(item.label), i({ class: "end fas fa-angle-left" }))
+            item.icon ? i({ class: `menu-icon ${item.icon}` }) : "",
+            p(text(item.label), i({ class: "menu-arrow" }))
           ),
           ul(
             {
-              class: ["nav nav-treeview"],
+              class: ["menu-item"],
             },
             item.subitems.map(subItem(currentUrl))
           ),
         ]
-      : span({ class: "nav-link" }, text(item.label))
+      : span({ class: "menu-link" }, text(item.label))
   );
 };
 
 const subItem = (currentUrl) => (item) =>
   li(
-    { class: "nav-item" },
+    { class: "menu-item" },
     item.link
       ? a(
           {
             class: [
-              "nav-link",
+              "menu-link",
               active(currentUrl, item) && "active",
               item.class,
             ],
@@ -249,13 +252,13 @@ const subItem = (currentUrl) => (item) =>
             href: text(item.link),
           },
           item.icon
-            ? i({ class: `nav-icon ${item.icon}` })
+            ? i({ class: `menu-icon ${item.icon}` })
             : i({ class: "far fa-circle nav-icon" }),
           p(item.label)
         )
       : a(
           {
-            class: ["nav-link"],
+            class: ["menu-link"],
             href: "javascript:;",
           },
           item.label
