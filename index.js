@@ -134,7 +134,6 @@ const sidebar = (brand, sections, currentUrl) =>
       "data-kt-drawer-width": "{default:'200px', '300px': '250px'}",
       "data-kt-drawer-direction": "start",
       "data-kt-drawer-toggle": "#kt_aside_toggle",
-      style: "",
     },
     div(
       {
@@ -164,6 +163,7 @@ const sidebar = (brand, sections, currentUrl) =>
       },
       div(
         {
+          //scrollbar not working
           class: "w-100 hover-scroll-y pe-2 me-2",
           id: "kt_aside_menu_wrapper",
           "data-kt-scroll": "true",
@@ -192,7 +192,6 @@ const sidebar = (brand, sections, currentUrl) =>
 const sideBarSection = (currentUrl) => (section) =>
   section.items.map(sideBarItem(currentUrl)).join("");
 
-//change here and adapt such that it looks like sidebar on Metronic but with elements from Tritac
 const sideBarItem = (currentUrl) => (item) => {
   const is_active = active(currentUrl, item);
   return div(
@@ -205,6 +204,8 @@ const sideBarItem = (currentUrl) => (item) => {
       ],
       id: "kt_aside_footer",
     },
+    //change subitems to match html structure from metronic so that the right styles and classes are applied
+    //only consider 2 levels of submenu, not 3 like in metronic
     item.link
       ? a(
           {
@@ -212,25 +213,39 @@ const sideBarItem = (currentUrl) => (item) => {
             href: text(item.link),
             target: item.target_blank ? "_blank" : undefined,
           },
-          item.icon ? i({ class: `menu-icon ${item.icon}` }) : "",
+          item.icon
+            ? span({ class: "menu-icon" }, i({ class: `fs-2 ${item.icon}` }))
+            : "",
 
-          p(text(item.label))
+          span({ class: "menu-title" }, text(item.label))
         )
       : item.subitems
       ? [
-          a(
-            {
-              class: ["menu-link", is_active && "active"],
-              href: "javascript:;",
-            },
-            item.icon ? i({ class: `menu-icon ${item.icon}` }) : "",
-            p(text(item.label), i({ class: "menu-arrow" }))
-          ),
-          ul(
-            {
-              class: ["menu-item"],
-            },
-            item.subitems.map(subItem(currentUrl))
+          div(
+            //change next line
+            { class: "menu-sub menu-sub-accordion" },
+            div(
+              { class: "menu-item" },
+              a(
+                {
+                  class: ["menu-link", is_active && "active"],
+                  href: "javascript:;",
+                },
+                item.icon
+                  ? span(
+                      { class: "menu-bullet" },
+                      i({ class: `bullet bullet-dot ${item.icon}` })
+                    )
+                  : "",
+                p(text(item.label), i({ class: "menu-title" }))
+              ),
+              div(
+                {
+                  class: ["menu-item"],
+                },
+                item.subitems.map(subItem(currentUrl))
+              )
+            )
           ),
         ]
       : span({ class: "menu-link" }, text(item.label))
@@ -280,7 +295,6 @@ const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
     <!-- Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700">
     <!-- Vendor Stylesheets -->
-		<link href="/plugins/public/metronic-theme${verstring}/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="/plugins/public/metronic-theme${verstring}/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 		<!--Global Stylesheets Bundle-->
 		<link href="/plugins/public/metronic-theme${verstring}/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
