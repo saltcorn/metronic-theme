@@ -163,7 +163,6 @@ const sidebar = (brand, sections, currentUrl) =>
       },
       div(
         {
-          //scrollbar not working
           class: "w-100 hover-scroll-y pe-2 me-2",
           id: "kt_aside_menu_wrapper",
           "data-kt-scroll": "true",
@@ -202,7 +201,6 @@ const sideBarItem = (currentUrl) => (item) => {
         item.subitems && is_active && "menu-open",
         item.isUser && "aside-footer flex-column-auto px-6 px-lg-9",
       ],
-      id: "kt_aside_footer",
     },
     //change subitems to match html structure from metronic so that the right styles and classes are applied
     //only consider 2 levels of submenu, not 3 like in metronic
@@ -221,6 +219,14 @@ const sideBarItem = (currentUrl) => (item) => {
         )
       : item.subitems
       ? [
+          span(
+            { class: "menu-link" },
+            item.icon
+              ? span({ class: "menu-icon" }, i({ class: `fs-2 ${item.icon}` }))
+              : "",
+            span({ class: "menu-title" }, text(item.label)),
+            span({ class: "menu-arrow"})
+          ),
           div(
             //change next line
             { class: "menu-sub menu-sub-accordion" },
@@ -316,8 +322,7 @@ const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
             crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
 
-    <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="/plugins/public/metronic-theme${verstring}/js/mdb.min.js"></script>
+    <script src="/plugins/public/metronic-theme${verstring}/assets/js/scripts.bundle.js"></script>
 
     ${headersInBody(headers)}
   </body>
