@@ -225,33 +225,12 @@ const sideBarItem = (currentUrl) => (item) => {
               ? span({ class: "menu-icon" }, i({ class: `fs-2 ${item.icon}` }))
               : "",
             span({ class: "menu-title" }, text(item.label)),
-            span({ class: "menu-arrow"})
+            span({ class: "menu-arrow" })
           ),
           div(
-            //change next line
             { class: "menu-sub menu-sub-accordion" },
-            div(
-              { class: "menu-item" },
-              a(
-                {
-                  class: ["menu-link", is_active && "active"],
-                  href: "javascript:;",
-                },
-                item.icon
-                  ? span(
-                      { class: "menu-bullet" },
-                      i({ class: `bullet bullet-dot ${item.icon}` })
-                    )
-                  : "",
-                p(text(item.label), i({ class: "menu-title" }))
-              ),
-              div(
-                {
-                  class: ["menu-item"],
-                },
-                item.subitems.map(subItem(currentUrl))
-              )
-            )
+
+            item.subitems.map(subItem(currentUrl))
           ),
         ]
       : span({ class: "menu-link" }, text(item.label))
@@ -259,7 +238,7 @@ const sideBarItem = (currentUrl) => (item) => {
 };
 
 const subItem = (currentUrl) => (item) =>
-  li(
+  div(
     { class: "menu-item" },
     item.link
       ? a(
