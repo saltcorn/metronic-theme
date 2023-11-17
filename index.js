@@ -199,7 +199,8 @@ const sideBarItem = (currentUrl) => (item) => {
       "data-kt-menu-trigger": item.subitems ? "click" : undefined,
       class: [
         "menu-item menu-accordion",
-        item.subitems && is_active && "menu-open",
+        item.subitems && is_active && "show here",
+        !item.subitems && is_active && "active",
         item.isUser && "aside-footer flex-column-auto px-6 px-lg-9",
       ],
     },
