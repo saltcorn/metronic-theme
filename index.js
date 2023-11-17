@@ -24,6 +24,7 @@ const Field = require("@saltcorn/data/models/field");
 const Table = require("@saltcorn/data/models/table");
 const Form = require("@saltcorn/data/models/form");
 const View = require("@saltcorn/data/models/view");
+const db = require("@saltcorn/data/db");
 const Workflow = require("@saltcorn/data/models/workflow");
 const { renderForm, link } = require("@saltcorn/markup");
 const {
@@ -286,9 +287,7 @@ const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
 		<link href="/plugins/public/metronic-theme${verstring}/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-    <!-- Material Design Bootstrap -->
-    <link href="/plugins/public/metronic-theme${verstring}/css/mdb.min.css" rel="stylesheet">
-
+    
     ${headersInHead(headers)}    
     <title>${text(title)}</title>
   </head>
@@ -296,9 +295,11 @@ const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
   <body ${bodyAttr}>
     ${body}
     <!-- Change script tags-->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" 
-            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" 
-            crossorigin="anonymous"></script>
+    <script src="/static_assets/${
+      db.connectObj.version_tag
+    }/jquery-3.6.0.min.js"></script>
+    <script src="/plugins/public/metronic-theme${verstring}/bootstrap.bundle.min.js"></script>
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
 
     <script src="/plugins/public/metronic-theme${verstring}/assets/js/scripts.bundle.js"></script>
