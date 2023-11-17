@@ -196,7 +196,7 @@ const sideBarItem = (currentUrl) => (item) => {
   const is_active = active(currentUrl, item);
   return div(
     {
-      "data-kt-menu-trigger": "click",
+      "data-kt-menu-trigger": item.subitems ? "click" : undefined,
       class: [
         "menu-item menu-accordion",
         item.subitems && is_active && "menu-open",
