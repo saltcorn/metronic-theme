@@ -3,6 +3,8 @@ const {
   text,
   a,
   p,
+  h3,
+  h2,
   footer,
   section,
   style,
@@ -154,7 +156,7 @@ const sidebar = (brand, sections, currentUrl) =>
             alt: "Logo",
             loading: "lazy",
           }),
-        span({ class: "logo" }, brand.name)
+        h2({ class: "logo" }, brand.name)
       )
     ),
     div(
@@ -291,6 +293,8 @@ const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
     
     ${headersInHead(headers)}    
     <title>${text(title)}</title>
+    <style>h2.logo { color: var(--bs-gray-700); display: inline;margin-left: 10px}</style>
+  
   </head>
 
   <body ${bodyAttr}>
