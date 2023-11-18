@@ -206,8 +206,7 @@ const sideBarItem = (currentUrl) => (item) => {
         item.isUser && "aside-footer flex-column-auto px-6 px-lg-9",
       ],
     },
-    //change subitems to match html structure from metronic so that the right styles and classes are applied
-    //only consider 2 levels of submenu, not 3 like in metronic
+
     item.link
       ? a(
           {
@@ -334,8 +333,12 @@ const layout = (config) => ({
         <!-- call the sidebar here-->
         ${sidebar(brand, menu, currentUrl)}
         <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-          <div id="page-inner-content">
-              ${renderBody(title, body, alerts, config, role)}
+          <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+            <div class="container-fluid" id="kt_content_container">
+                  <div id="page-inner-content">
+                    ${renderBody(title, body, alerts, config, role)}
+                  </div>
+            </div>
           </div>
         </div>
       </div>    
