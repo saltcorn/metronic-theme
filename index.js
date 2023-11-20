@@ -283,10 +283,16 @@ const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
     <!-- Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700">
     <!-- Vendor Stylesheets -->
-		<link href="/plugins/public/metronic-theme${verstring}/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+		<link href="/plugins/public/metronic-theme${verstring}/${
+  config.stylesheet || "demo9"
+}/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 		<!--Global Stylesheets Bundle-->
-		<link href="/plugins/public/metronic-theme${verstring}/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="/plugins/public/metronic-theme${verstring}/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+		<link href="/plugins/public/metronic-theme${verstring}/${
+  config.stylesheet || "demo9"
+}/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+		<link href="/plugins/public/metronic-theme${verstring}/${
+  config.stylesheet || "demo9"
+}/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     
@@ -306,7 +312,9 @@ const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
 
-    <script src="/plugins/public/metronic-theme${verstring}/assets/js/scripts.bundle.js"></script>
+    <script src="/plugins/public/metronic-theme${verstring}/${
+  config.stylesheet || "demo9"
+}/assets/js/scripts.bundle.js"></script>
 
     ${headersInBody(headers)}
   </body>
@@ -471,37 +479,17 @@ const configuration_workflow = () =>
                 required: true,
               },
               {
-                name: "colorscheme",
-                label: "Navbar color scheme",
+                name: "stylesheet",
+                label: "Stylesheet",
                 type: "String",
                 required: true,
                 default: "navbar-light",
                 attributes: {
                   options: [
-                    { name: "navbar-dark bg-dark", label: "Dark" },
-                    { name: "navbar-dark bg-primary", label: "Dark Primary" },
-                    {
-                      name: "navbar-dark bg-secondary",
-                      label: "Dark Secondary",
-                    },
-                    { name: "navbar-light bg-light", label: "Light" },
-                    { name: "navbar-light bg-white", label: "White" },
-                    { name: "navbar-light", label: "Transparent Light" },
+                    { name: "demo9", label: "Sales Manager" },
+                    { name: "demo15", label: "Crypto Planner" },
                   ],
                 },
-              },
-              {
-                name: "fixedTop",
-                label: "Navbar Fixed Top",
-                type: "Bool",
-                required: true,
-              },
-              {
-                name: "backgroundColor",
-                label: "Background Color",
-                type: "Color",
-                default: "#ffffff",
-                required: true,
               },
             ],
           });
