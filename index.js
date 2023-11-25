@@ -129,18 +129,18 @@ const sidebar = (brand, sections, currentUrl) =>
   div(
     {
       id: "kt_aside",
-      class: "aside pt-7 pb-4 pb-lg-7 pt-lg-17",
-      //"data-kt-drawer": "true",
+      class: "aside ",
+      "data-kt-drawer": "true",
       "data-kt-drawer-name": "aside",
       "data-kt-drawer-activate": "{default: true, lg: false}",
       "data-kt-drawer-overlay": "true",
-      "data-kt-drawer-width": "{default:'200px', '300px': '250px'}",
+      "data-kt-drawer-width": "auto",
       "data-kt-drawer-direction": "start",
       "data-kt-drawer-toggle": "#kt_aside_toggle",
     },
     div(
       {
-        class: "aside-logo flex-column-auto px-9 mb-9 mb-lg-17 mx-auto",
+        class: "aside-logo flex-column-auto pt-10 pt-lg-20",
         id: "kt_aside_logo",
       },
       a(
@@ -152,7 +152,7 @@ const sidebar = (brand, sections, currentUrl) =>
             src: brand.logo,
             width: "30",
             height: "30",
-            class: "h-30px logo theme-light-show",
+            class: "h-40px",
             alt: "Logo",
             loading: "lazy",
           }),
@@ -161,34 +161,43 @@ const sidebar = (brand, sections, currentUrl) =>
     ),
     div(
       {
-        class: "aside-menu flex-column-fluid ps-3 ps-lg-5 pe-1 mb-9",
+        class: "aside-menu flex-column-fluid pt-0 pb-7 py-lg-10",
         id: "kt_aside_menu",
       },
       div(
         {
-          class: "w-100 hover-scroll-y pe-2 me-2",
           id: "kt_aside_menu_wrapper",
+          class: "w-100 hover-scroll-y scroll-lg-ms d-flex",
           "data-kt-scroll": "true",
-          "data-kt-scroll-activate": "{default: false, lg: true}",
+          "data-kt-scroll-activate": "{default: false, lg: trur}",
           "data-kt-scroll-height": "auto",
-          "data-kt-scroll-dependencies":
-            "#kt_aside_logo, #kt_aside_user, #kt_aside_footer",
-          "data-kt-scroll-wrappers":
-            "#kt_aside, #kt_aside_menu, #kt_aside_menu_wrapper",
+          "data-kt-scroll-dependencies": "#kt_aside_logo, #kt_aside_footer",
+          "data-kt-scroll-wrappers": "#kt_aside, #kt_aside_menu",
           "data-kt-scroll-offset": "0",
-          style: "height: 810px;",
         },
-
         div(
           {
+            id: "kt_aside_menu",
             class:
-              "menu menu-column menu-rounded menu-sub-indention fw-semibold",
-            id: "#kt_aside_menu",
+              "menu menu-column menu-title-gray-600 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-icon-gray-500 menu-arrow-gray-500 fw-semibold fs-6 my-auto",
             "data-kt-menu": "true",
           },
           sections.map(sideBarSection(currentUrl))
         )
       )
+    ),
+    div(
+      {
+        class: "aside-footer flex-column-auto pb-5 pb-lg-10",
+        id: "kt_aside_footer",
+      },
+      div({
+        class: "d-flex flex-center w-100 scroll-px",
+        "data-bs-toggle": "tooltip",
+        "data-bs-placement": "right",
+        "data-bs-dismiss": "click",
+        title: "Quick actions",
+      })
     )
   );
 const sideBarSection = (currentUrl) => (section) =>
@@ -198,9 +207,12 @@ const sideBarItem = (currentUrl) => (item) => {
   const is_active = active(currentUrl, item);
   return div(
     {
-      "data-kt-menu-trigger": item.subitems ? "click" : undefined,
+      "data-kt-menu-trigger": item.subitems
+        ? "{default: 'click', lg: 'hover'}"
+        : undefined,
+      "data-kt-enu-placement": "right-start",
       class: [
-        "menu-item menu-accordion",
+        "menu-item show py-2",
         item.subitems && is_active && "show here",
         !item.subitems && is_active && "active",
         item.isUser && "aside-footer flex-column-auto px-6 px-lg-9",
@@ -210,28 +222,36 @@ const sideBarItem = (currentUrl) => (item) => {
     item.link
       ? a(
           {
-            class: ["menu-link", is_active && "active"],
+            class: ["menu-link menu-center", is_active && "active"],
             href: text(item.link),
             target: item.target_blank ? "_blank" : undefined,
           },
           item.icon
             ? span({ class: "menu-icon" }, i({ class: `fs-2 ${item.icon}` }))
-            : "",
+            : ""
 
-          span({ class: "menu-title" }, text(item.label))
+          //span({ class: "menu-title" }, text(item.label))
         )
       : item.subitems
       ? [
           span(
-            { class: "menu-link" },
+            { class: "menu-link menu-center" },
             item.icon
-              ? span({ class: "menu-icon" }, i({ class: `fs-2 ${item.icon}` }))
-              : "",
-            span({ class: "menu-title" }, text(item.label)),
-            span({ class: "menu-arrow" })
+              ? span(
+                  { class: "menu-icon me-0" },
+                  i(
+                    { class: `fs-2 ${item.icon}` },
+                    span({ class: "path1" }),
+                    span({ class: "path2" })
+                  )
+                )
+              : ""
           ),
           div(
-            { class: "menu-sub menu-sub-accordion" },
+            {
+              class:
+                "menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto",
+            },
 
             item.subitems.map(subItem(currentUrl))
           ),
@@ -242,7 +262,9 @@ const sideBarItem = (currentUrl) => (item) => {
 
 const subItem = (currentUrl) => (item) =>
   div(
-    { class: "menu-item" },
+    {
+      class: "menu-item",
+    },
     item.link
       ? a(
           {
@@ -257,7 +279,7 @@ const subItem = (currentUrl) => (item) =>
           item.icon
             ? i({ class: `menu-icon ${item.icon}` })
             : i({ class: "far fa-circle nav-icon" }),
-          p(item.label)
+          span({ class: "menu-title" }, item.label)
         )
       : a(
           {
@@ -308,9 +330,8 @@ const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
     <script src="/static_assets/${
       db.connectObj.version_tag
     }/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="/plugins/public/metronic-theme${verstring}/bootstrap.bundle.min.js"></script>
-
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
 
     <script src="/plugins/public/metronic-theme${verstring}/${
   config.stylesheet || "demo9"
@@ -328,10 +349,10 @@ const authBrand = (config, { name, logo }) =>
 
 const layout = (config) => ({
   wrap: ({ title, menu, brand, alerts, currentUrl, body, headers, role }) => {
-    console.log("menu", JSON.stringify(menu, null, 2));
+    console.log("menu", JSON.stringify(brand, null, 2));
     return wrapIt(
       config,
-      'id="page-top"',
+      'id="kt_body"  class="header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-disabled"',
       headers,
       title,
       //this represents the body
@@ -341,11 +362,28 @@ const layout = (config) => ({
         <!-- call the sidebar here-->
         ${sidebar(brand, menu, currentUrl)}
         <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-          <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-            <div class="container-fluid" id="kt_content_container">
-                  <div id="page-inner-content">
-                    ${renderBody(title, body, alerts, config, role)}
+          <div class="header-mobile py-3">
+            <div class="container d-flex flex-stack">
+                  <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
+                    <a 
+                      brand.logo &&
+                      <img class: "h-40px">
+                        <h2 class="logo">
+                          TRITAC
+                        </h2>
+                      </img>
+                    </a>
                   </div>
+                  <button class="btn btn-icon btn-active-color-primary me-n4" id="kt_aside_toggle">
+                    <i class="ki-duotone ki-abstract-14 fs-2x"><span class="path1"></span><span class="path2"></span></i>
+                  </button>
+            </div>
+          </div>
+          <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+            <div class="container-xxl" id="kt_content_container">
+                <div id="page-inner-content">
+                  ${renderBody(title, body, alerts, config, role)}
+                </div>
             </div>
           </div>
         </div>
