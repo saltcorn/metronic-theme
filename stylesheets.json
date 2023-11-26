@@ -32,8 +32,15 @@
       "kt_aside_menu1": {
         "class": "menu menu-column menu-title-gray-600 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-icon-gray-500 menu-arrow-gray-500 fw-semibold fs-6 my-auto",
         "data-kt-menu": "true"
-      }
+      },
+      "menu_item": { "data-kt-enu-placement": "right-start" }
     },
+    "menuItemClass": "py-2",
+    "menuLinkClass": "menu-center",
+    "menuItemTrigger": "{default: 'click', lg: 'hover'}",
+    "menuHasLabel": false,
+    "menuHasArrow": false,
+    "menuSubClass": "menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto",
     "bodyClass": "header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-disabled"
   },
   "demo15": {
@@ -69,8 +76,15 @@
       "kt_aside_menu1": {
         "class": "menu menu-column menu-rounded menu-sub-indention fw-semibold",
         "data-kt-menu": "true"
-      }
+      },
+      "menu_item": { "data-kt-enu-placement": "right-start" }
     },
-    "bodyClass": ""
+    "bodyClass": "menu-accordion",
+    "menuItemClass": "py-2",
+    "menuLinkClass": "",
+    "menuHasLabel": true,
+    "menuHasArrow": true,
+    "menuSubClass": "menu-sub-accordion",
+    "menuItemTrigger": "click"
   }
 }

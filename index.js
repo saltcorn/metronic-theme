@@ -167,7 +167,7 @@ const sidebar = (brand, sections, currentUrl, stylesheet) =>
             id: "kt_aside_menu1",
             ...stylesheet.attributes.kt_aside_menu1,
           },
-          sections.map(sideBarSection(currentUrl))
+          sections.map(sideBarSection(currentUrl, stylesheet))
         )
       )
     )
@@ -185,57 +185,66 @@ const sidebar = (brand, sections, currentUrl, stylesheet) =>
       })
     )*/
   );
-const sideBarSection = (currentUrl) => (section) =>
-  section.items.map(sideBarItem(currentUrl)).join("");
+const sideBarSection = (currentUrl, stylesheet) => (section) =>
+  section.items.map(sideBarItem(currentUrl, stylesheet)).join("");
 
-const sideBarItem = (currentUrl) => (item) => {
+const sideBarItem = (currentUrl, stylesheet) => (item) => {
   const is_active = active(currentUrl, item);
   return div(
     {
       "data-kt-menu-trigger": item.subitems
-        ? "{default: 'click', lg: 'hover'}"
+        ? stylesheet.menuItemTrigger
         : undefined,
-      "data-kt-enu-placement": "right-start",
+      ...stylesheet.attributes.menu_item,
       class: [
-        "menu-item show py-2",
+        "menu-item",
+        stylesheet.menuItemClass,
         item.subitems && is_active && "show here",
         !item.subitems && is_active && "active",
-        item.isUser && "aside-footer flex-column-auto px-6 px-lg-9",
+        // item.isUser && "aside-footer flex-column-auto px-6 px-lg-9",
       ],
     },
 
     item.link
       ? a(
           {
-            class: ["menu-link menu-center", is_active && "active"],
+            class: [
+              "menu-link",
+              stylesheet.menuLinkClass,
+
+              is_active && "active",
+            ],
             href: text(item.link),
             target: item.target_blank ? "_blank" : undefined,
           },
           item.icon
             ? span({ class: "menu-icon" }, i({ class: `fs-2 ${item.icon}` }))
-            : ""
+            : "",
 
-          //span({ class: "menu-title" }, text(item.label))
+          stylesheet.menuHasLabel &&
+            span({ class: "menu-title" }, text(item.label))
         )
       : item.subitems
       ? [
           span(
-            { class: "menu-link menu-center" },
+            { class: ["menu-link", stylesheet.menuLinkClass] },
             item.icon
               ? span(
                   { class: "menu-icon me-0" },
                   i(
-                    { class: `fs-2 ${item.icon}` },
-                    span({ class: "path1" }),
-                    span({ class: "path2" })
+                    { class: `fs-2 ${item.icon}` }
+                    //span({ class: "path1" }),
+                    //span({ class: "path2" })
                   )
                 )
-              : ""
+              : "",
+            stylesheet.menuHasLabel &&
+              span({ class: "menu-title" }, text(item.label)),
+            stylesheet.menuHasArrow && span({ class: "menu-arrow" })
           ),
           div(
             {
-              class:
-                "menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto",
+              class: ["menu-sub", stylesheet.menuSubClass],
             },
 
             item.subitems.map(subItem(currentUrl))
