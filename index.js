@@ -129,11 +129,11 @@ const sidebar = (brand, sections, currentUrl, stylesheet) =>
   div(
     {
       id: "kt_aside",
-      ...stylesheet.attributesById.kt_aside,
+      ...stylesheet.attributes.kt_aside,
     },
     div(
       {
-        ...stylesheet.attributesById.kt_aside_logo,
+        ...stylesheet.attributes.kt_aside_logo,
         id: "kt_aside_logo",
       },
       a(
@@ -154,18 +154,18 @@ const sidebar = (brand, sections, currentUrl, stylesheet) =>
     ),
     div(
       {
-        ...stylesheet.attributesById.kt_aside_menu,
+        ...stylesheet.attributes.kt_aside_menu,
         id: "kt_aside_menu",
       },
       div(
         {
           id: "kt_aside_menu_wrapper",
-          ...stylesheet.attributesById.kt_aside_menu_wrapper,
+          ...stylesheet.attributes.kt_aside_menu_wrapper,
         },
         div(
           {
             id: "kt_aside_menu1",
-            ...stylesheet.attributesById.kt_aside_menu1,
+            ...stylesheet.attributes.kt_aside_menu1,
           },
           sections.map(sideBarSection(currentUrl))
         )

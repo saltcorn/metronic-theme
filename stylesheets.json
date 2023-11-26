@@ -3,7 +3,7 @@
     "name": "demo9",
     "label": "Sales Manager",
     "sidebarClass": "",
-    "attributesById": {
+    "attributes": {
       "kt_aside": {
         "class": "aside",
         "data-kt-drawer": "true",
@@ -40,7 +40,7 @@
     "name": "demo15",
     "label": "Crypto Planner",
     "sidebarClass": "pt-7 pb-4 pb-lg-7 pt-lg-17",
-    "attributesById": {
+    "attributes": {
       "kt_aside": {
         "class": "aside pt-7 pb-4 pb-lg-7 pt-lg-17",
         "data-kt-drawer-name": "aside",
