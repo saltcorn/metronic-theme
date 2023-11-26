@@ -125,22 +125,15 @@ const renderBody = (title, body, alerts, config, role) =>
     alerts,
   });
 
-const sidebar = (brand, sections, currentUrl) =>
+const sidebar = (brand, sections, currentUrl, stylesheet) =>
   div(
     {
       id: "kt_aside",
-      class: "aside ",
-      "data-kt-drawer": "true",
-      "data-kt-drawer-name": "aside",
-      "data-kt-drawer-activate": "{default: true, lg: false}",
-      "data-kt-drawer-overlay": "true",
-      "data-kt-drawer-width": "auto",
-      "data-kt-drawer-direction": "start",
-      "data-kt-drawer-toggle": "#kt_aside_toggle",
+      ...stylesheet.attributesById.kt_aside,
     },
     div(
       {
-        class: "aside-logo flex-column-auto pt-10 pt-lg-20",
+        ...stylesheet.attributesById.kt_aside_logo,
         id: "kt_aside_logo",
       },
       a(
@@ -161,32 +154,24 @@ const sidebar = (brand, sections, currentUrl) =>
     ),
     div(
       {
-        class: "aside-menu flex-column-fluid pt-0 pb-7 py-lg-10",
+        ...stylesheet.attributesById.kt_aside_menu,
         id: "kt_aside_menu",
       },
       div(
         {
           id: "kt_aside_menu_wrapper",
-          class: "w-100 hover-scroll-y scroll-lg-ms d-flex",
-          "data-kt-scroll": "true",
-          "data-kt-scroll-activate": "{default: false, lg: trur}",
-          "data-kt-scroll-height": "auto",
-          "data-kt-scroll-dependencies": "#kt_aside_logo, #kt_aside_footer",
-          "data-kt-scroll-wrappers": "#kt_aside, #kt_aside_menu",
-          "data-kt-scroll-offset": "0",
+          ...stylesheet.attributesById.kt_aside_menu_wrapper,
         },
         div(
           {
-            id: "kt_aside_menu",
-            class:
-              "menu menu-column menu-title-gray-600 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-icon-gray-500 menu-arrow-gray-500 fw-semibold fs-6 my-auto",
-            "data-kt-menu": "true",
+            id: "kt_aside_menu1",
+            ...stylesheet.attributesById.kt_aside_menu1,
           },
           sections.map(sideBarSection(currentUrl))
         )
       )
-    ),
-    div(
+    )
+    /*div(
       {
         class: "aside-footer flex-column-auto pb-5 pb-lg-10",
         id: "kt_aside_footer",
@@ -198,7 +183,7 @@ const sidebar = (brand, sections, currentUrl) =>
         "data-bs-dismiss": "click",
         title: "Quick actions",
       })
-    )
+    )*/
   );
 const sideBarSection = (currentUrl) => (section) =>
   section.items.map(sideBarItem(currentUrl)).join("");
@@ -357,7 +342,7 @@ const layout = (config) => ({
     <div class="d-flex flex-column flex-root">
       <div class="page d-flex flex-row flex-column-fluid">
         <!-- call the sidebar here-->
-        ${sidebar(brand, menu, currentUrl)}
+        ${sidebar(brand, menu, currentUrl, stylesheet)}
         <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
           <div class="header-mobile py-3">
             <div class="container d-flex flex-stack">

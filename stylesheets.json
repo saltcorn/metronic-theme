@@ -2,7 +2,75 @@
   "demo9": {
     "name": "demo9",
     "label": "Sales Manager",
+    "sidebarClass": "",
+    "attributesById": {
+      "kt_aside": {
+        "class": "aside",
+        "data-kt-drawer": "true",
+        "data-kt-drawer-name": "aside",
+        "data-kt-drawer-activate": "{default: true, lg: false}",
+        "data-kt-drawer-overlay": "true",
+        "data-kt-drawer-width": "auto",
+        "data-kt-drawer-direction": "start",
+        "data-kt-drawer-toggle": "#kt_aside_toggle"
+      },
+      "kt_aside_logo": {
+        "class": "aside-logo flex-column-auto pt-10 pt-lg-20"
+      },
+      "kt_aside_menu": {
+        "class": "aside-menu flex-column-fluid pt-0 pb-7 py-lg-10"
+      },
+      "kt_aside_menu_wrapper": {
+        "class": "w-100 hover-scroll-y scroll-lg-ms d-flex",
+        "data-kt-scroll": "true",
+        "data-kt-scroll-activate": "{default: false, lg: trur}",
+        "data-kt-scroll-height": "auto",
+        "data-kt-scroll-dependencies": "#kt_aside_logo, #kt_aside_footer",
+        "data-kt-scroll-wrappers": "#kt_aside, #kt_aside_menu",
+        "data-kt-scroll-offset": "0"
+      },
+      "kt_aside_menu1": {
+        "class": "menu menu-column menu-title-gray-600 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-icon-gray-500 menu-arrow-gray-500 fw-semibold fs-6 my-auto",
+        "data-kt-menu": "true"
+      }
+    },
     "bodyClass": "header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-disabled"
   },
-  "demo15": { "name": "demo15", "label": "Crypto Planner", "bodyClass": "" }
+  "demo15": {
+    "name": "demo15",
+    "label": "Crypto Planner",
+    "sidebarClass": "pt-7 pb-4 pb-lg-7 pt-lg-17",
+    "attributesById": {
+      "kt_aside": {
+        "class": "aside pt-7 pb-4 pb-lg-7 pt-lg-17",
+        "data-kt-drawer-name": "aside",
+        "data-kt-drawer-activate": "{default: true, lg: false}",
+        "data-kt-drawer-overlay": "true",
+        "data-kt-drawer-width": "{default:'200px', '300px': '250px'}",
+        "data-kt-drawer-direction": "start",
+        "data-kt-drawer-toggle": "#kt_aside_toggle"
+      },
+      "kt_aside_logo": {
+        "class": "aside-logo flex-column-auto px-9 mb-9 mb-lg-17 mx-auto"
+      },
+      "kt_aside_menu": {
+        "class": "aside-menu flex-column-fluid ps-3 ps-lg-5 pe-1 mb-9"
+      },
+      "kt_aside_menu_wrapper": {
+        "class": "w-100 hover-scroll-y pe-2 me-2",
+        "data-kt-scroll": "true",
+        "data-kt-scroll-activate": "{default: false, lg: true}",
+        "data-kt-scroll-height": "auto",
+        "data-kt-scroll-dependencies": "#kt_aside_logo, #kt_aside_user, #kt_aside_footer",
+        "data-kt-scroll-wrappers": "#kt_aside, #kt_aside_menu, #kt_aside_menu_wrapper",
+        "data-kt-scroll-offset": "0",
+        "style": "height: 810px;"
+      },
+      "kt_aside_menu1": {
+        "class": "menu menu-column menu-rounded menu-sub-indention fw-semibold",
+        "data-kt-menu": "true"
+      }
+    },
+    "bodyClass": ""
+  }
 }
