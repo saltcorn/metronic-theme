@@ -305,9 +305,6 @@ const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
     <!-- Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700">
     <!-- Vendor Stylesheets -->
-		<link href="/plugins/public/metronic-theme${verstring}/${
-  config.stylesheet || "demo9"
-}/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 		<!--Global Stylesheets Bundle-->
 		<link href="/plugins/public/metronic-theme${verstring}/${
   config.stylesheet || "demo9"
@@ -349,10 +346,10 @@ const authBrand = (config, { name, logo }) =>
 
 const layout = (config) => ({
   wrap: ({ title, menu, brand, alerts, currentUrl, body, headers, role }) => {
-    console.log("menu", JSON.stringify(brand, null, 2));
+    const stylesheet = getStylesheet(config);
     return wrapIt(
       config,
-      'id="kt_body"  class="header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-disabled"',
+      `id="kt_body" class="${stylesheet.bodyClass}"`,
       headers,
       title,
       //this represents the body
@@ -502,6 +499,11 @@ const formModify = (form) => {
   return form;
 };
 
+// see titles here https://preview.keenthemes.com/metronic8
+const stylesheets = require("./stylesheets.json");
+
+const getStylesheet = (config) => stylesheets[config.stylesheet || "demo9"];
+
 const configuration_workflow = () =>
   new Workflow({
     steps: [
@@ -523,10 +525,10 @@ const configuration_workflow = () =>
                 required: true,
                 default: "navbar-light",
                 attributes: {
-                  options: [
-                    { name: "demo9", label: "Sales Manager" },
-                    { name: "demo15", label: "Crypto Planner" },
-                  ],
+                  options: stylesheets.map(({ name, label }) => ({
+                    name,
+                    label,
+                  })),
                 },
               },
             ],

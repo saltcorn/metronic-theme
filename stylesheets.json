@@ -1,0 +1,8 @@
+{
+  "demo9": {
+    "name": "demo9",
+    "label": "Sales Manager",
+    "bodyClass": "header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-disabled"
+  },
+  "demo15": { "name": "demo15", "label": "Crypto Planner", "bodyClass": "" }
+}
