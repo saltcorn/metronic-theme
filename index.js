@@ -125,6 +125,21 @@ const renderBody = (title, body, alerts, config, role) =>
     alerts,
   });
 
+const brandLogo = (stylesheet, brand) =>
+  a(
+    {
+      href: "/",
+    },
+    brand.logo &&
+      img({
+        src: brand.logo,
+        class: "h-40px",
+        alt: "Logo",
+      }),
+    (stylesheet.menuHasLabel || !brand.logo) &&
+      h2({ class: "logo" }, brand.name)
+  );
+
 const sidebar = (brand, sections, currentUrl, stylesheet) =>
   div(
     {
@@ -136,19 +151,7 @@ const sidebar = (brand, sections, currentUrl, stylesheet) =>
         ...stylesheet.attributes.kt_aside_logo,
         id: "kt_aside_logo",
       },
-      a(
-        {
-          href: "/",
-        },
-        brand.logo &&
-          img({
-            src: brand.logo,
-            class: "h-40px",
-            alt: "Logo",
-            loading: "lazy",
-          }),
-        stylesheet.menuHasLabel && h2({ class: "logo" }, brand.name)
-      )
+      brandLogo(stylesheet, brand)
     ),
     div(
       {
@@ -354,21 +357,14 @@ const layout = (config) => ({
           <div class="header-mobile py-3">
             <div class="container d-flex flex-stack">
                   <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-                    <a 
-                      brand.logo &&
-                      <img class: "h-40px">
-                        <h2 class="logo">
-                          TRITAC
-                        </h2>
-                      </img>
-                    </a>
+                    ${brandLogo(stylesheet, brand)}
                   </div>
                   <button class="btn btn-icon btn-active-color-primary me-n4" id="kt_aside_toggle">
                     <i class="ki-duotone ki-abstract-14 fs-2x"><span class="path1"></span><span class="path2"></span></i>
                   </button>
             </div>
           </div>
-          <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+          <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="margin-top:0px">
             <div class="container-xxl" id="kt_content_container">
                 <div id="page-inner-content">
                   ${renderBody(title, body, alerts, config, role)}
