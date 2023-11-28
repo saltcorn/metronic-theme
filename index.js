@@ -143,13 +143,11 @@ const sidebar = (brand, sections, currentUrl, stylesheet) =>
         brand.logo &&
           img({
             src: brand.logo,
-            width: "30",
-            height: "30",
             class: "h-40px",
             alt: "Logo",
             loading: "lazy",
           }),
-        h2({ class: "logo" }, brand.name)
+        stylesheet.menuHasLabel && h2({ class: "logo" }, brand.name)
       )
     ),
     div(
@@ -519,10 +517,12 @@ const configuration_workflow = () =>
                 required: true,
                 default: "navbar-light",
                 attributes: {
-                  options: stylesheets.map(({ name, label }) => ({
-                    name,
-                    label,
-                  })),
+                  options: Object.values(stylesheets).map(
+                    ({ name, label }) => ({
+                      name,
+                      label,
+                    })
+                  ),
                 },
               },
             ],
