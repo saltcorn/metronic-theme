@@ -45,6 +45,14 @@ const blockDispatch = (config) => ({
     cardTitleHeader: 2,
     cardClass: "card-flush",
     cardTitleWrapDiv: true,
+    tabClass: "nav-line-tabs mb-3",
+    searchBar: {
+      inputClass: "ps-13",
+      iconButton: false,
+      containerClass: "d-flex align-items-center position-relative w-100 m-0",
+      iconClass:
+        "fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y",
+    },
   },
   pageHeader: ({ title, blurb }) =>
     div(
