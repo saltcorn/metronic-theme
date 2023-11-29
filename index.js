@@ -41,6 +41,11 @@ const verstring = features?.version_plugin_serve_path
   : "";
 
 const blockDispatch = (config) => ({
+  hints: {
+    cardTitleHeader: 2,
+    cardClass: "card-flush",
+    cardTitleWrapDiv: true,
+  },
   pageHeader: ({ title, blurb }) =>
     div(
       h1({ class: "h3 mb-0 mt-2 text-gray-800" }, title),
