@@ -512,11 +512,13 @@ const configuration_workflow = () =>
         name: "stylesheet",
         form: async () => {
           return new Form({
+            blurb:
+              'Note that this is a Commercial theme, and requires a License from <a href="https://keenthemes.com/metronic">KeenThemes</a> ',
             fields: [
               {
-                name: "in_card",
-                label: "Default content in card?",
-                type: "Bool",
+                name: "purchase_code",
+                label: "Purchase code",
+                type: "String",
                 required: true,
               },
               {
