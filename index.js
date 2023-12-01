@@ -40,20 +40,21 @@ const verstring = features?.version_plugin_serve_path
   ? "@" + require("./package.json").version
   : "";
 
-const blockDispatch = (config) => ({
-  hints: {
-    cardTitleHeader: 2,
-    cardClass: "card-flush",
-    cardTitleWrapDiv: true,
-    tabClass: "nav-line-tabs mb-3",
-    searchBar: {
-      inputClass: "ps-13",
-      iconButton: false,
-      containerClass: "d-flex align-items-center position-relative w-100 m-0",
-      iconClass:
-        "fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y",
-    },
+const hints = {
+  cardTitleHeader: 2,
+  cardClass: "card-flush",
+  cardTitleWrapDiv: true,
+  tabClass: "nav-line-tabs mb-3",
+  searchBar: {
+    inputClass: "ps-13",
+    iconButton: false,
+    containerClass: "d-flex align-items-center position-relative w-100 m-0",
+    iconClass:
+      "fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y",
   },
+};
+
+const blockDispatch = (config) => ({
   pageHeader: ({ title, blurb }) =>
     div(
       h1({ class: "h3 mb-0 mt-2 text-gray-800" }, title),
@@ -136,6 +137,7 @@ const renderBody = (title, body, alerts, config, role) =>
         ? { type: "card", title, contents: body }
         : body,
     alerts,
+    hints,
   });
 
 const brandLogo = (stylesheet, brand) =>
@@ -353,6 +355,7 @@ const authBrand = (config, { name, logo }) =>
     : "";
 
 const layout = (config) => ({
+  hints,
   wrap: ({ title, menu, brand, alerts, currentUrl, body, headers, role }) => {
     const stylesheet = getStylesheet(config);
     return wrapIt(
