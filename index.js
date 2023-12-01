@@ -552,4 +552,5 @@ module.exports = {
   layout, //main function we are exporting
   configuration_workflow,
   plugin_name: "metronic-theme",
+  fonts: (config) => ({ Inter: "Inter, sans-serif" }),
 };
