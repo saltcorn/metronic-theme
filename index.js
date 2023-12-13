@@ -16,6 +16,7 @@ const {
   ul,
   li,
   img,
+  button,
 } = require("@saltcorn/markup/tags");
 const {
   navbar,
@@ -354,10 +355,91 @@ const authBrand = (config, { name, logo }) =>
     ? `<img class="mb-4" src="${logo}" alt="Logo" width="72" height="72">`
     : "";
 
+const secondaryMenuHeader = (menu, stylesheet, brand) =>
+  div(
+    { id: "kt_header", style: "", class: "header align-items-stretch" },
+    div(
+      {
+        class:
+          " container-fluid  d-flex align-items-stretch justify-content-between",
+      },
+      div(
+        {
+          class:
+            "d-flex align-items-stretch justify-content-between flex-lg-grow-1",
+        },
+        div(
+          { class: "d-flex align-items-stretch", id: "kt_header_nav" },
+          span(h2("Welcome User"))
+        ),
+        div(
+          { class: "d-flex align-items-stretch flex-shrink-0" },
+          div(
+            {
+              class:
+                "btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px",
+            },
+            i({ class: "ki-outline ki-magnifier fs-1" })
+          )
+        )
+      ),
+      button(
+        {
+          class: "btn btn-icon btn-active-color-primary me-n4",
+          id: "kt_aside_toggle",
+        },
+        i(
+          { class: "ki-duotone ki-abstract-14 fs-2x" },
+          span({ class: "path1" }),
+          span({ class: "path2" })
+        )
+      )
+    )
+  );
+const mobileHeader = (stylesheet, brand) =>
+  div(
+    { class: "header-mobile py-3" },
+    div(
+      { class: "container d-flex flex-stack" },
+      div(
+        { class: "d-flex align-items-center flex-grow-1 flex-lg-grow-0" },
+        brandLogo(stylesheet, brand)
+      ),
+      button(
+        {
+          class: "btn btn-icon btn-active-color-primary me-n4",
+          id: "kt_aside_toggle",
+        },
+        i(
+          { class: "ki-duotone ki-abstract-14 fs-2x" },
+          span({ class: "path1" }),
+          span({ class: "path2" })
+        )
+      )
+    )
+  );
 const layout = (config) => ({
   hints,
   wrap: ({ title, menu, brand, alerts, currentUrl, body, headers, role }) => {
     const stylesheet = getStylesheet(config);
+    console.log(menu[0]);
+    const sidebarMenu = menu.map((menusection) => ({
+      ...menusection,
+      items: menusection.items.filter(
+        (item) => !item.location || item.location === "Standard"
+      ),
+    }));
+    const headerMenu = menu
+      .map((menusection) => ({
+        ...menusection,
+        items: menusection.items.filter(
+          (item) => item.location === "Secondary Menu"
+        ),
+      }))
+      .filter((menusection) => menusection.items.length > 0);
+    const header = config.secondary_menu_header
+      ? secondaryMenuHeader(headerMenu, stylesheet, brand)
+      : mobileHeader(stylesheet, brand);
     return wrapIt(
       config,
       `id="kt_body" class="${stylesheet.bodyClass}"`,
@@ -368,25 +450,9 @@ const layout = (config) => ({
     <div class="d-flex flex-column flex-root">
       <div class="page d-flex flex-row flex-column-fluid">
         <!-- call the sidebar here-->
-        ${sidebar(brand, menu, currentUrl, stylesheet)}
+        ${sidebar(brand, sidebarMenu, currentUrl, stylesheet)}
         <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-          <div id="kt_header" style class="header align-items-stretch">
-            <div class=" container-fluid  d-flex align-items-stretch justify-content-between">
-              <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
-                <div class="d-flex align-items-stretch" id="kt_header_nav">
-                  <span> <h2> Welcome User </h2> </span>
-                </div>
-                <div class="d-flex align-items-stretch flex-shrink-0">
-                  <div class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px">
-                    <i class="ki-outline ki-magnifier fs-1"></i>                    
-                  </div>
-                </div>
-              </div>
-                  <button class="btn btn-icon btn-active-color-primary me-n4" id="kt_aside_toggle">
-                    <i class="ki-duotone ki-abstract-14 fs-2x"><span class="path1"></span><span class="path2"></span></i>
-                  </button>
-            </div>
-          </div>
+          ${header}
           <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="margin-top:0px">
             <div class="container-xxl" id="kt_content_container">
                 <div id="page-inner-content">
@@ -545,6 +611,11 @@ const configuration_workflow = () =>
                     })
                   ),
                 },
+              },
+              {
+                name: "secondary_menu_header",
+                label: "Secondary menu header",
+                type: "Bool",
               },
             ],
           });
