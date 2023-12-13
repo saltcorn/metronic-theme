@@ -355,13 +355,13 @@ const authBrand = (config, { name, logo }) =>
     ? `<img class="mb-4" src="${logo}" alt="Logo" width="72" height="72">`
     : "";
 
-const secondaryMenuHeader = (menu, stylesheet, brand) =>
+const secondaryMenuHeader = (menuItems, stylesheet, brand) =>
   div(
     { id: "kt_header", style: "", class: "header align-items-stretch" },
     div(
       {
         class:
-          " container-fluid  d-flex align-items-stretch justify-content-between",
+          "container-fluid d-flex align-items-stretch justify-content-between",
       },
       div(
         {
@@ -369,17 +369,45 @@ const secondaryMenuHeader = (menu, stylesheet, brand) =>
             "d-flex align-items-stretch justify-content-between flex-lg-grow-1",
         },
         div(
-          { class: "d-flex align-items-stretch", id: "kt_header_nav" },
-          span(h2("Welcome User"))
-        ),
-        div(
-          { class: "d-flex align-items-stretch flex-shrink-0" },
+          {
+            class: "header-menu align-items-stretch",
+            "data-kt-drawer": "true",
+            "data-kt-drawer-name": "header-menu",
+            "data-kt-drawer-activate": "{default: true, lg: false}",
+            "data-kt-drawer-overlay": "true",
+            "data-kt-drawer-width": "{default:'200px', '300px': '250px'}",
+            "data-kt-drawer-direction": "end",
+            "data-kt-drawer-toggle": "#kt_header_menu_mobile_toggle",
+            "data-kt-swapper": "true",
+            "data-kt-swapper-mode": "prepend",
+            "data-kt-swapper-parent":
+              "{default: '#kt_body', lg: '#kt_header_nav'}",
+            style: "",
+          },
           div(
             {
               class:
-                "btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px",
+                "menu menu-rounded menu-column menu-lg-row menu-active-bg menu-state-primary menu-title-gray-700 menu-arrow-gray-500 fw-semibold my-5 my-lg-0 px-2 px-lg-0 align-items-stretch",
+              id: "#kt_header_menu",
+              "data-kt-menu": "true",
             },
-            i({ class: "ki-outline ki-magnifier fs-1" })
+            menuItems.map((item) =>
+              div(
+                {
+                  //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+                  "data-kt-menu-placement": "bottom-start",
+                  class:
+                    "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+                },
+                a(
+                  { href: item.link, class: "menu-link" },
+                  span(
+                    { class: "menu-link py-3" },
+                    span({ class: "menu-title" }, item.label)
+                  )
+                )
+              )
+            )
           )
         )
       ),
@@ -422,24 +450,24 @@ const layout = (config) => ({
   hints,
   wrap: ({ title, menu, brand, alerts, currentUrl, body, headers, role }) => {
     const stylesheet = getStylesheet(config);
-    console.log(menu[0]);
+    //console.log(menu[0]);
     const sidebarMenu = menu.map((menusection) => ({
       ...menusection,
       items: menusection.items.filter(
         (item) => !item.location || item.location === "Standard"
       ),
     }));
-    const headerMenu = menu
-      .map((menusection) => ({
-        ...menusection,
-        items: menusection.items.filter(
-          (item) => item.location === "Secondary Menu"
-        ),
-      }))
-      .filter((menusection) => menusection.items.length > 0);
+    const headerItems = [];
+    menu.forEach(({ items }) => {
+      items.forEach((item) => {
+        if (item.location === "Secondary Menu") headerItems.push(item);
+      });
+    });
+
     const header = config.secondary_menu_header
-      ? secondaryMenuHeader(headerMenu, stylesheet, brand)
+      ? secondaryMenuHeader(headerItems, stylesheet, brand)
       : mobileHeader(stylesheet, brand);
+    console.log(headerItems);
     return wrapIt(
       config,
       `id="kt_body" class="${stylesheet.bodyClass}"`,
