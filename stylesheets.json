@@ -40,6 +40,7 @@
     "menuLinkClass": "menu-center",
     "menuItemTrigger": "{default: 'click', lg: 'hover'}",
     "menuHasLabel": false,
+    "brandHasLabel": false,
     "menuHasArrow": false,
     "menuSubClass": "menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto"
   },
@@ -84,6 +85,7 @@
     "menuLinkClass": "",
     "menuItemTrigger": "click",
     "menuHasLabel": true,
+    "brandHasLabel": true,
     "menuHasArrow": true,
     "menuSubClass": "menu-sub-accordion"
   },
@@ -126,6 +128,7 @@
     "menuItemClass": "py-2",
     "menuLinkClass": "menu-center",
     "menuHasLabel": true,
+    "brandHasLabel": false,
     "menuHasArrow": false,
     "menuSubClass": "menu-sub-dropdown menu-sub-indention px-2 py-4 w-250px mh-75 overflow-auto",
     "menuItemTrigger": "{default: 'click', lg: 'hover'}"

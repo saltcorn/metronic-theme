@@ -151,7 +151,7 @@ const brandLogo = (stylesheet, brand) =>
         class: "h-40px",
         alt: "Logo",
       }),
-    (stylesheet.menuHasLabel || !brand.logo) &&
+    (stylesheet.brandHasLabel || !brand.logo) &&
       h2({ class: "logo" }, brand.name)
   );
 
