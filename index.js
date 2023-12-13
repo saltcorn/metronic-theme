@@ -370,11 +370,18 @@ const layout = (config) => ({
         <!-- call the sidebar here-->
         ${sidebar(brand, menu, currentUrl, stylesheet)}
         <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-          <div class="header-mobile py-3">
-            <div class="container d-flex flex-stack">
-                  <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-                    ${brandLogo(stylesheet, brand)}
+          <div id="kt_header" style class="header align-items-stretch">
+            <div class=" container-fluid  d-flex align-items-stretch justify-content-between">
+              <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
+                <div class="d-flex align-items-stretch" id="kt_header_nav">
+                  <span> <h2> Welcome User </h2> </span>
+                </div>
+                <div class="d-flex align-items-stretch flex-shrink-0">
+                  <div class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px">
+                    <i class="ki-outline ki-magnifier fs-1"></i>                    
                   </div>
+                </div>
+              </div>
                   <button class="btn btn-icon btn-active-color-primary me-n4" id="kt_aside_toggle">
                     <i class="ki-duotone ki-abstract-14 fs-2x"><span class="path1"></span><span class="path2"></span></i>
                   </button>

@@ -35,13 +35,13 @@
       },
       "menu_item": { "data-kt-enu-placement": "right-start" }
     },
+    "bodyClass": "header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-disabled",
     "menuItemClass": "py-2",
     "menuLinkClass": "menu-center",
     "menuItemTrigger": "{default: 'click', lg: 'hover'}",
     "menuHasLabel": false,
     "menuHasArrow": false,
-    "menuSubClass": "menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto",
-    "bodyClass": "header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-disabled"
+    "menuSubClass": "menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto"
   },
   "demo15": {
     "name": "demo15",
@@ -82,9 +82,52 @@
     "bodyClass": "menu-accordion",
     "menuItemClass": "py-2",
     "menuLinkClass": "",
+    "menuItemTrigger": "click",
     "menuHasLabel": true,
     "menuHasArrow": true,
-    "menuSubClass": "menu-sub-accordion",
-    "menuItemTrigger": "click"
+    "menuSubClass": "menu-sub-accordion"
+  },
+  "demo6": {
+    "name": "demo6",
+    "label": "Time Reporting",
+    "sidebarClass": "pb-5 pt-5 pt-lg-0",
+    "attributes": {
+      "kt_aside": {
+        "class": "aside overflow-visible pb-5 pt-5 pt-lg-0 ",
+        "data-kt-drawer": "true",
+        "data-kt-drawer-name": "aside",
+        "data-kt-drawer-activate": "{default: true, lg: false}",
+        "data-kt-drawer-overlay": "true",
+        "data-kt-drawer-width": "{default:'80px', '300px': '100px'}",
+        "data-kt-drawer-direction": "start",
+        "data-kt-drawer-toggle": "#kt_aside_mobile_toggle"
+      },
+      "kt_aside_logo": {
+        "class": "aside-logo  py-8"
+      },
+      "kt_aside_menu": {
+        "class": "aside-menu flex-column-fluid"
+      },
+      "kt_aside_menu_wrapper": {
+        "class": "hover-scroll-y my-2 my-lg-5 scroll-ms",
+        "data-kt-scroll": "true",
+        "data-kt-scroll-height": "auto",
+        "data-kt-scroll-dependencies": "#kt_aside_logo, #kt_aside_footer",
+        "data-kt-scroll-wrappers": "#kt_aside, #kt_aside_menu",
+        "data-kt-scroll-offset": "5px"
+      },
+      "kt_aside_menu1": {
+        "class": "menu menu-column menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-semibold",
+        "data-kt-menu": "true"
+      },
+      "menu_item": { "data-kt-enu-placement": "right-start" }
+    },
+    "bodyClass": "menu-accordion",
+    "menuItemClass": "py-2",
+    "menuLinkClass": "menu-center",
+    "menuHasLabel": true,
+    "menuHasArrow": false,
+    "menuSubClass": "menu-sub-dropdown menu-sub-indention px-2 py-4 w-250px mh-75 overflow-auto",
+    "menuItemTrigger": "{default: 'click', lg: 'hover'}"
   }
 }
