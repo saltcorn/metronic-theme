@@ -16,6 +16,9 @@ const {
   ul,
   li,
   img,
+  button,
+  form,
+  input,
 } = require("@saltcorn/markup/tags");
 const {
   navbar,
@@ -151,7 +154,7 @@ const brandLogo = (stylesheet, brand) =>
         class: "h-40px",
         alt: "Logo",
       }),
-    (stylesheet.menuHasLabel || !brand.logo) &&
+    (stylesheet.brandHasLabel || !brand.logo) &&
       h2({ class: "logo" }, brand.name)
   );
 
@@ -354,10 +357,243 @@ const authBrand = (config, { name, logo }) =>
     ? `<img class="mb-4" src="${logo}" alt="Logo" width="72" height="72">`
     : "";
 
+const secondaryMenuHeader = (
+  menuItems,
+  stylesheet,
+  brand,
+  hasNotifications,
+  config,
+  user
+) =>
+  div(
+    { id: "kt_header", style: "", class: "header align-items-stretch" },
+    div(
+      {
+        class:
+          "container-fluid d-flex align-items-stretch justify-content-between",
+      },
+      div(
+        {
+          class: "d-flex align-items-center d-lg-none ms-n1 me-2",
+          title: "Show aside menu",
+        },
+        div(
+          {
+            class:
+              "btn btn-icon btn-active-color-primary w-30px h-30px w-md-40px h-md-40px",
+            id: "kt_aside_mobile_toggle",
+          },
+          i({ class: "ki-outline ki-abstract-14 fs-1" })
+        )
+      ),
+      div(
+        { class: "d-flex align-items-center flex-grow-1 flex-lg-grow-0" },
+        a(
+          {
+            href: "/",
+            class: "d-lg-none",
+          },
+          brand.logo &&
+            img({
+              src: brand.logo,
+              class: "h-40px",
+              alt: "Logo",
+            }),
+          (stylesheet.brandHasLabel || !brand.logo) &&
+            h2({ class: "logo" }, brand.name)
+        )
+      ),
+      div(
+        {
+          class:
+            "d-flex align-items-stretch justify-content-between flex-lg-grow-1",
+        },
+        div(
+          { class: "d-flex align-items-stretch", id: "kt_header_nav" },
+          div(
+            {
+              class: "header-menu align-items-stretch",
+              "data-kt-drawer": "true",
+              "data-kt-drawer-name": "header-menu",
+              "data-kt-drawer-activate": "{default: true, lg: false}",
+              "data-kt-drawer-overlay": "true",
+              "data-kt-drawer-width": "{default:'200px', '300px': '250px'}",
+              "data-kt-drawer-direction": "end",
+              "data-kt-drawer-toggle": "#kt_header_menu_mobile_toggle",
+              "data-kt-swapper": "true",
+              "data-kt-swapper-mode": "prepend",
+              "data-kt-swapper-parent":
+                "{default: '#kt_body', lg: '#kt_header_nav'}",
+              style: "",
+            },
+            div(
+              {
+                class:
+                  "menu menu-rounded menu-column menu-lg-row menu-active-bg menu-state-primary menu-title-gray-700 menu-arrow-gray-500 fw-semibold my-5 my-lg-0 px-2 px-lg-0 align-items-stretch",
+                id: "#kt_header_menu",
+                "data-kt-menu": "true",
+              },
+              menuItems.map((item) =>
+                item.type === "Search"
+                  ? form(
+                      {
+                        action: "/search",
+                        class: "menusearch mt-4",
+                        method: "get",
+                      },
+                      i({
+                        style: { top: "35px" },
+                        class:
+                          "fas fa-search fs-2 text-gray-500 position-absolute translate-middle-y ms-0",
+                      }),
+
+                      input({
+                        type: "search",
+                        class:
+                          "search-input  form-control form-control-flush ps-10 search-bar hasbl",
+                        style: { borderBottom: "1px solid gray" },
+                        placeholder: item.label,
+                        id: "inputq",
+                        name: "q",
+                        "aria-label": "Search",
+                        "aria-describedby": "button-search-submit",
+                      })
+                    )
+                  : div(
+                      {
+                        //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+                        "data-kt-menu-placement": "bottom-start",
+                        class:
+                          "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+                      },
+                      a(
+                        { href: item.link, class: "menu-link" },
+                        span(
+                          { class: "menu-link py-3" },
+                          span({ class: "menu-title" }, item.label)
+                        )
+                      )
+                    )
+              )
+            )
+          )
+        ),
+        div(
+          { class: "d-flex align-items-stretch flex-shrink-0" },
+
+          hasNotifications &&
+            div(
+              { class: "d-flex align-items-stretch ms-1 ms-lg-3 mt-4" },
+              div(
+                {
+                  //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+                  "data-kt-menu-placement": "bottom-start",
+                  class:
+                    "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+                },
+                a(
+                  { href: "/notifications", class: "menu-link" },
+                  span({ class: "menu-icon" }, i({ class: `fs-2 fa fa-bell` }))
+                )
+              )
+            ),
+          config.avatar_file &&
+            div(
+              { class: "d-flex align-items-center ms-1 ms-lg-3" },
+              div(
+                {
+                  //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+                  "data-kt-menu-placement": "bottom-start",
+                  class:
+                    "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+                },
+                a(
+                  { href: "/", class: "menu-link" },
+                  span(
+                    { class: "menu-icon" },
+                    user?.[config.avatar_file]
+                      ? img({
+                          src: `/files/resize/40/40/${
+                            user?.[config.avatar_file]
+                          }`,
+                          height: 40,
+                          width: 40,
+                        })
+                      : i({ class: `fs-2 fa fa-user` })
+                  )
+                )
+              )
+            )
+        )
+      )
+    )
+  );
+const mobileHeader = (stylesheet, brand) =>
+  div(
+    { class: "header-mobile py-3" },
+    div(
+      { class: "container d-flex flex-stack" },
+      div(
+        { class: "d-flex align-items-center flex-grow-1 flex-lg-grow-0" },
+        brandLogo(stylesheet, brand)
+      ),
+      button(
+        {
+          class: "btn btn-icon btn-active-color-primary me-n4",
+          id: "kt_aside_toggle",
+        },
+        i(
+          { class: "ki-duotone ki-abstract-14 fs-2x" },
+          span({ class: "path1" }),
+          span({ class: "path2" })
+        )
+      )
+    )
+  );
 const layout = (config) => ({
   hints,
-  wrap: ({ title, menu, brand, alerts, currentUrl, body, headers, role }) => {
+  wrap: ({
+    title,
+    menu,
+    brand,
+    alerts,
+    currentUrl,
+    body,
+    headers,
+    role,
+    req,
+  }) => {
     const stylesheet = getStylesheet(config);
+    //console.log(menu[1]);
+    const sidebarMenu = menu.map((menusection) => ({
+      ...menusection,
+      items: menusection.items.filter(
+        (item) => !item.location || item.location === "Standard"
+      ),
+    }));
+    //console.log("reuserq", req.user);
+    const headerItems = [];
+    menu.forEach(({ items }) => {
+      items.forEach((item) => {
+        if (item.location === "Secondary Menu") headerItems.push(item);
+      });
+    });
+    //console.log(headerItems);
+    const hasNotifications = menu
+      .find((section) => section.isUser)
+      ?.items?.[0]?.subitems?.find?.((item) => item.link === "/notifications");
+    //console.log("userItem", hasNotifications);
+    const header = config.secondary_menu_header
+      ? secondaryMenuHeader(
+          headerItems,
+          stylesheet,
+          brand,
+          hasNotifications,
+          config,
+          req?.user
+        )
+      : mobileHeader(stylesheet, brand);
+
     return wrapIt(
       config,
       `id="kt_body" class="${stylesheet.bodyClass}"`,
@@ -368,18 +604,9 @@ const layout = (config) => ({
     <div class="d-flex flex-column flex-root">
       <div class="page d-flex flex-row flex-column-fluid">
         <!-- call the sidebar here-->
-        ${sidebar(brand, menu, currentUrl, stylesheet)}
+        ${sidebar(brand, sidebarMenu, currentUrl, stylesheet)}
         <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-          <div class="header-mobile py-3">
-            <div class="container d-flex flex-stack">
-                  <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-                    ${brandLogo(stylesheet, brand)}
-                  </div>
-                  <button class="btn btn-icon btn-active-color-primary me-n4" id="kt_aside_toggle">
-                    <i class="ki-duotone ki-abstract-14 fs-2x"><span class="path1"></span><span class="path2"></span></i>
-                  </button>
-            </div>
-          </div>
+          ${header}
           <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="margin-top:0px">
             <div class="container-xxl" id="kt_content_container">
                 <div id="page-inner-content">
@@ -514,6 +741,7 @@ const configuration_workflow = () =>
       {
         name: "stylesheet",
         form: async () => {
+          const userFields = Table.findOne("users").fields;
           return new Form({
             blurb:
               'Note that this is a Commercial theme, and requires a License from <a href="https://keenthemes.com/metronic">KeenThemes</a> ',
@@ -537,6 +765,19 @@ const configuration_workflow = () =>
                       label,
                     })
                   ),
+                },
+              },
+              {
+                name: "secondary_menu_header",
+                label: "Secondary menu header",
+                type: "Bool",
+              },
+              {
+                name: "avatar_file",
+                label: "Avatar field",
+                type: "String",
+                attributes: {
+                  options: userFields.filter((f) => f.type === "File"),
                 },
               },
             ],
