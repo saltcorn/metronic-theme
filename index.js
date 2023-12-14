@@ -386,7 +386,23 @@ const secondaryMenuHeader = (
           i({ class: "ki-outline ki-abstract-14 fs-1" })
         )
       ),
-      div({ class: "d-flex align-items-center flex-grow-1 flex-lg-grow-0" }),
+      div(
+        { class: "d-flex align-items-center flex-grow-1 flex-lg-grow-0" },
+        a(
+          {
+            href: "/",
+            class: "d-lg-none",
+          },
+          brand.logo &&
+            img({
+              src: brand.logo,
+              class: "h-40px",
+              alt: "Logo",
+            }),
+          (stylesheet.brandHasLabel || !brand.logo) &&
+            h2({ class: "logo" }, brand.name)
+        )
+      ),
       div(
         {
           class:
