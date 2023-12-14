@@ -17,6 +17,8 @@ const {
   li,
   img,
   button,
+  form,
+  input,
 } = require("@saltcorn/markup/tags");
 const {
   navbar,
@@ -392,21 +394,49 @@ const secondaryMenuHeader = (menuItems, stylesheet, brand) =>
               "data-kt-menu": "true",
             },
             menuItems.map((item) =>
-              div(
-                {
-                  //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
-                  "data-kt-menu-placement": "bottom-start",
-                  class:
-                    "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
-                },
-                a(
-                  { href: item.link, class: "menu-link" },
-                  span(
-                    { class: "menu-link py-3" },
-                    span({ class: "menu-title" }, item.label)
+              item.type === "Search"
+                ? form(
+                    {
+                      action: "/search",
+                      class: "menusearch mt-4",
+                      method: "get",
+                    },
+                    div(
+                      { class: "input-group search-bar" },
+
+                      input({
+                        type: "search",
+                        class: "form-control search-bar ps-2 hasbl",
+                        placeholder: item.label,
+                        id: "inputq",
+                        name: "q",
+                        "aria-label": "Search",
+                        "aria-describedby": "button-search-submit",
+                      }),
+                      button(
+                        {
+                          class: "btn btn-outline-secondary search-bar",
+                          type: "submit",
+                        },
+                        i({ class: "fas fa-search" })
+                      )
+                    )
                   )
-                )
-              )
+                : div(
+                    {
+                      //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+                      "data-kt-menu-placement": "bottom-start",
+                      class:
+                        "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+                    },
+                    a(
+                      { href: item.link, class: "menu-link" },
+                      span(
+                        { class: "menu-link py-3" },
+                        span({ class: "menu-title" }, item.label)
+                      )
+                    )
+                  )
             )
           )
         )
@@ -463,11 +493,11 @@ const layout = (config) => ({
         if (item.location === "Secondary Menu") headerItems.push(item);
       });
     });
-
+    //console.log(headerItems);
     const header = config.secondary_menu_header
       ? secondaryMenuHeader(headerItems, stylesheet, brand)
       : mobileHeader(stylesheet, brand);
-    console.log(headerItems);
+
     return wrapIt(
       config,
       `id="kt_body" class="${stylesheet.bodyClass}"`,
