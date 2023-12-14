@@ -484,17 +484,6 @@ const secondaryMenuHeader = (
               )
           )
         )
-      ),
-      button(
-        {
-          class: "btn btn-icon btn-active-color-primary me-n4",
-          id: "kt_aside_toggle",
-        },
-        i(
-          { class: "ki-duotone ki-abstract-14 fs-2x" },
-          span({ class: "path1" }),
-          span({ class: "path2" })
-        )
       )
     )
   );
@@ -541,7 +530,7 @@ const layout = (config) => ({
         (item) => !item.location || item.location === "Standard"
       ),
     }));
-    console.log("reuserq", req.user);
+    //console.log("reuserq", req.user);
     const headerItems = [];
     menu.forEach(({ items }) => {
       items.forEach((item) => {
