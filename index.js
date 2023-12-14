@@ -372,80 +372,92 @@ const secondaryMenuHeader = (
         class:
           "container-fluid d-flex align-items-stretch justify-content-between",
       },
+      div({ class: "d-flex align-items-center flex-grow-1 flex-lg-grow-0" }),
+      div({ class: "d-flex align-items-center flex-grow-1 flex-lg-grow-0" }),
       div(
         {
           class:
             "d-flex align-items-stretch justify-content-between flex-lg-grow-1",
         },
         div(
-          {
-            class: "header-menu align-items-stretch",
-            "data-kt-drawer": "true",
-            "data-kt-drawer-name": "header-menu",
-            "data-kt-drawer-activate": "{default: true, lg: false}",
-            "data-kt-drawer-overlay": "true",
-            "data-kt-drawer-width": "{default:'200px', '300px': '250px'}",
-            "data-kt-drawer-direction": "end",
-            "data-kt-drawer-toggle": "#kt_header_menu_mobile_toggle",
-            "data-kt-swapper": "true",
-            "data-kt-swapper-mode": "prepend",
-            "data-kt-swapper-parent":
-              "{default: '#kt_body', lg: '#kt_header_nav'}",
-            style: "",
-          },
+          { class: "d-flex align-items-stretch", id: "kt_header_nav" },
           div(
             {
-              class:
-                "menu menu-rounded menu-column menu-lg-row menu-active-bg menu-state-primary menu-title-gray-700 menu-arrow-gray-500 fw-semibold my-5 my-lg-0 px-2 px-lg-0 align-items-stretch",
-              id: "#kt_header_menu",
-              "data-kt-menu": "true",
+              class: "header-menu align-items-stretch",
+              "data-kt-drawer": "true",
+              "data-kt-drawer-name": "header-menu",
+              "data-kt-drawer-activate": "{default: true, lg: false}",
+              "data-kt-drawer-overlay": "true",
+              "data-kt-drawer-width": "{default:'200px', '300px': '250px'}",
+              "data-kt-drawer-direction": "end",
+              "data-kt-drawer-toggle": "#kt_header_menu_mobile_toggle",
+              "data-kt-swapper": "true",
+              "data-kt-swapper-mode": "prepend",
+              "data-kt-swapper-parent":
+                "{default: '#kt_body', lg: '#kt_header_nav'}",
+              style: "",
             },
-            menuItems.map((item) =>
-              item.type === "Search"
-                ? form(
-                    {
-                      action: "/search",
-                      class: "menusearch mt-4",
-                      method: "get",
-                    },
-                    div(
-                      { class: "input-group search-bar" },
+            div(
+              {
+                class:
+                  "menu menu-rounded menu-column menu-lg-row menu-active-bg menu-state-primary menu-title-gray-700 menu-arrow-gray-500 fw-semibold my-5 my-lg-0 px-2 px-lg-0 align-items-stretch",
+                id: "#kt_header_menu",
+                "data-kt-menu": "true",
+              },
+              menuItems.map((item) =>
+                item.type === "Search"
+                  ? form(
+                      {
+                        action: "/search",
+                        class: "menusearch mt-4",
+                        method: "get",
+                      },
+                      div(
+                        { class: "input-group search-bar" },
 
-                      input({
-                        type: "search",
-                        class: "form-control search-bar ps-2 hasbl",
-                        placeholder: item.label,
-                        id: "inputq",
-                        name: "q",
-                        "aria-label": "Search",
-                        "aria-describedby": "button-search-submit",
-                      }),
-                      button(
-                        {
-                          class: "btn btn-outline-secondary search-bar",
-                          type: "submit",
-                        },
-                        i({ class: "fas fa-search" })
+                        input({
+                          type: "search",
+                          class: "form-control search-bar ps-2 hasbl",
+                          placeholder: item.label,
+                          id: "inputq",
+                          name: "q",
+                          "aria-label": "Search",
+                          "aria-describedby": "button-search-submit",
+                        }),
+                        button(
+                          {
+                            class: "btn btn-outline-secondary search-bar",
+                            type: "submit",
+                          },
+                          i({ class: "fas fa-search" })
+                        )
                       )
                     )
-                  )
-                : div(
-                    {
-                      //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
-                      "data-kt-menu-placement": "bottom-start",
-                      class:
-                        "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
-                    },
-                    a(
-                      { href: item.link, class: "menu-link" },
-                      span(
-                        { class: "menu-link py-3" },
-                        span({ class: "menu-title" }, item.label)
+                  : div(
+                      {
+                        //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+                        "data-kt-menu-placement": "bottom-start",
+                        class:
+                          "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+                      },
+                      a(
+                        { href: item.link, class: "menu-link" },
+                        span(
+                          { class: "menu-link py-3" },
+                          span({ class: "menu-title" }, item.label)
+                        )
                       )
                     )
-                  )
-            ),
-            hasNotifications &&
+              )
+            )
+          )
+        ),
+        div(
+          { class: "d-flex align-items-stretch flex-shrink-0" },
+
+          hasNotifications &&
+            div(
+              { class: "d-flex align-items-stretch ms-1 ms-lg-3 mt-4" },
               div(
                 {
                   //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
@@ -457,8 +469,11 @@ const secondaryMenuHeader = (
                   { href: "/notifications", class: "menu-link" },
                   span({ class: "menu-icon" }, i({ class: `fs-2 fa fa-bell` }))
                 )
-              ),
-            config.avatar_file &&
+              )
+            ),
+          config.avatar_file &&
+            div(
+              { class: "d-flex align-items-center ms-1 ms-lg-3" },
               div(
                 {
                   //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
@@ -482,7 +497,7 @@ const secondaryMenuHeader = (
                   )
                 )
               )
-          )
+            )
         )
       )
     )
