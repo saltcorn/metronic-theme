@@ -357,7 +357,7 @@ const authBrand = (config, { name, logo }) =>
     ? `<img class="mb-4" src="${logo}" alt="Logo" width="72" height="72">`
     : "";
 
-const secondaryMenuHeader = (menuItems, stylesheet, brand) =>
+const secondaryMenuHeader = (menuItems, stylesheet, brand, hasNotifications) =>
   div(
     { id: "kt_header", style: "", class: "header align-items-stretch" },
     div(
@@ -437,7 +437,20 @@ const secondaryMenuHeader = (menuItems, stylesheet, brand) =>
                       )
                     )
                   )
-            )
+            ),
+            hasNotifications &&
+              div(
+                {
+                  //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+                  "data-kt-menu-placement": "bottom-start",
+                  class:
+                    "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+                },
+                a(
+                  { href: "/notifications", class: "menu-link" },
+                  span({ class: "menu-icon" }, i({ class: `fs-2 fa fa-bell` }))
+                )
+              )
           )
         )
       ),
@@ -480,7 +493,7 @@ const layout = (config) => ({
   hints,
   wrap: ({ title, menu, brand, alerts, currentUrl, body, headers, role }) => {
     const stylesheet = getStylesheet(config);
-    //console.log(menu[0]);
+    //console.log(menu[1]);
     const sidebarMenu = menu.map((menusection) => ({
       ...menusection,
       items: menusection.items.filter(
@@ -494,8 +507,12 @@ const layout = (config) => ({
       });
     });
     //console.log(headerItems);
+    const hasNotifications = menu
+      .find((section) => section.isUser)
+      ?.items?.[0]?.subitems?.find?.((item) => item.link === "/notifications");
+    //console.log("userItem", hasNotifications);
     const header = config.secondary_menu_header
-      ? secondaryMenuHeader(headerItems, stylesheet, brand)
+      ? secondaryMenuHeader(headerItems, stylesheet, brand, hasNotifications)
       : mobileHeader(stylesheet, brand);
 
     return wrapIt(
