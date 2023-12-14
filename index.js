@@ -357,7 +357,14 @@ const authBrand = (config, { name, logo }) =>
     ? `<img class="mb-4" src="${logo}" alt="Logo" width="72" height="72">`
     : "";
 
-const secondaryMenuHeader = (menuItems, stylesheet, brand, hasNotifications) =>
+const secondaryMenuHeader = (
+  menuItems,
+  stylesheet,
+  brand,
+  hasNotifications,
+  config,
+  user
+) =>
   div(
     { id: "kt_header", style: "", class: "header align-items-stretch" },
     div(
@@ -450,6 +457,30 @@ const secondaryMenuHeader = (menuItems, stylesheet, brand, hasNotifications) =>
                   { href: "/notifications", class: "menu-link" },
                   span({ class: "menu-icon" }, i({ class: `fs-2 fa fa-bell` }))
                 )
+              ),
+            config.avatar_file &&
+              div(
+                {
+                  //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+                  "data-kt-menu-placement": "bottom-start",
+                  class:
+                    "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+                },
+                a(
+                  { href: "/", class: "menu-link" },
+                  span(
+                    { class: "menu-icon" },
+                    user?.[config.avatar_file]
+                      ? img({
+                          src: `/files/resize/40/40/${
+                            user?.[config.avatar_file]
+                          }`,
+                          height: 40,
+                          width: 40,
+                        })
+                      : i({ class: `fs-2 fa fa-user` })
+                  )
+                )
               )
           )
         )
@@ -491,7 +522,17 @@ const mobileHeader = (stylesheet, brand) =>
   );
 const layout = (config) => ({
   hints,
-  wrap: ({ title, menu, brand, alerts, currentUrl, body, headers, role }) => {
+  wrap: ({
+    title,
+    menu,
+    brand,
+    alerts,
+    currentUrl,
+    body,
+    headers,
+    role,
+    req,
+  }) => {
     const stylesheet = getStylesheet(config);
     //console.log(menu[1]);
     const sidebarMenu = menu.map((menusection) => ({
@@ -500,6 +541,7 @@ const layout = (config) => ({
         (item) => !item.location || item.location === "Standard"
       ),
     }));
+    console.log("reuserq", req.user);
     const headerItems = [];
     menu.forEach(({ items }) => {
       items.forEach((item) => {
@@ -512,7 +554,14 @@ const layout = (config) => ({
       ?.items?.[0]?.subitems?.find?.((item) => item.link === "/notifications");
     //console.log("userItem", hasNotifications);
     const header = config.secondary_menu_header
-      ? secondaryMenuHeader(headerItems, stylesheet, brand, hasNotifications)
+      ? secondaryMenuHeader(
+          headerItems,
+          stylesheet,
+          brand,
+          hasNotifications,
+          config,
+          req?.user
+        )
       : mobileHeader(stylesheet, brand);
 
     return wrapIt(
@@ -662,6 +711,7 @@ const configuration_workflow = () =>
       {
         name: "stylesheet",
         form: async () => {
+          const userFields = Table.findOne("users").fields;
           return new Form({
             blurb:
               'Note that this is a Commercial theme, and requires a License from <a href="https://keenthemes.com/metronic">KeenThemes</a> ',
@@ -691,6 +741,14 @@ const configuration_workflow = () =>
                 name: "secondary_menu_header",
                 label: "Secondary menu header",
                 type: "Bool",
+              },
+              {
+                name: "avatar_file",
+                label: "Avatar field",
+                type: "String",
+                attributes: {
+                  options: userFields.filter((f) => f.type === "File"),
+                },
               },
             ],
           });
