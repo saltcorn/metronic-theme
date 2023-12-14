@@ -412,26 +412,23 @@ const secondaryMenuHeader = (
                         class: "menusearch mt-4",
                         method: "get",
                       },
-                      div(
-                        { class: "input-group search-bar" },
+                      i({
+                        style: { top: "35px" },
+                        class:
+                          "fas fa-search fs-2 text-gray-500 position-absolute translate-middle-y ms-0",
+                      }),
 
-                        input({
-                          type: "search",
-                          class: "form-control search-bar ps-2 hasbl",
-                          placeholder: item.label,
-                          id: "inputq",
-                          name: "q",
-                          "aria-label": "Search",
-                          "aria-describedby": "button-search-submit",
-                        }),
-                        button(
-                          {
-                            class: "btn btn-outline-secondary search-bar",
-                            type: "submit",
-                          },
-                          i({ class: "fas fa-search" })
-                        )
-                      )
+                      input({
+                        type: "search",
+                        class:
+                          "search-input  form-control form-control-flush ps-10 search-bar hasbl",
+                        style: { borderBottom: "1px solid gray" },
+                        placeholder: item.label,
+                        id: "inputq",
+                        name: "q",
+                        "aria-label": "Search",
+                        "aria-describedby": "button-search-submit",
+                      })
                     )
                   : div(
                       {
