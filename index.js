@@ -508,7 +508,7 @@ const secondaryMenuHeader = (
                     "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
                 },
                 a(
-                  { href: "/", class: "menu-link" },
+                  { href: "/auth/settings", class: "menu-link" },
                   span(
                     { class: "menu-icon" },
                     user?.[config.avatar_file]
