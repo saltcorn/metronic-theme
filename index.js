@@ -602,8 +602,8 @@ const layout = (config) => ({
       title,
       //this represents the body
       `
-    <div class="d-flex flex-column flex-root app-root">
-      <div class="app-page page d-flex flex-row flex-column-fluid">
+    <div class="d-flex flex-column flex-root">
+      <div class="page d-flex flex-row flex-column-fluid">
         <!-- call the sidebar here-->
         ${sidebar(brand, sidebarMenu, currentUrl, stylesheet)}
         <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">

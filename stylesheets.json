@@ -1,4 +1,49 @@
 {
+  "demo8": {
+    "name": "demo8",
+    "label": "Analytics App",
+    "attributes": {
+      "kt_aside": {
+        "class": "aside",
+        "data-kt-drawer-name": "aside",
+        "data-kt-drawer-activate": "{default: true, lg: false}",
+        "data-kt-drawer-overlay": "true",
+        "data-kt-drawer-width": "{default:'200px', '300px': '250px'}",
+        "data-kt-drawer-direction": "start",
+        "data-kt-drawer-toggle": "#kt_aside_toggle"
+      },
+      "kt_aside_logo": {
+        "class": "aside-logo flex-column-auto px-9 mb-9 mb-lg-17 mx-auto"
+      },
+      "kt_aside_menu": {
+        "class": "aside-menu flex-column-fluid"
+      },
+      "kt_aside_menu_wrapper": {
+        "class": "w-100 hover-scroll-y mx-3 my-5 my-lg-5",
+        "data-kt-scroll": "true",
+        "data-kt-scroll-activate": "{default: false, lg: true}",
+        "data-kt-scroll-height": "auto",
+        "data-kt-scroll-dependencies": "#kt_aside_logo, #kt_aside_user, #kt_aside_footer",
+        "data-kt-scroll-wrappers": "#kt_aside, #kt_aside_menu, #kt_aside_menu_wrapper",
+        "data-kt-scroll-offset": "5px",
+        "style": "height: 222px;"
+      },
+      "kt_aside_menu1": {
+        "class": "menu menu-column menu-rounded menu-sub-indention fw-semibold",
+        "data-kt-menu": "true"
+      },
+      "menu_item": { "data-kt-enu-placement": "right-start" }
+    },
+    "bodyAttrs": "data-bs-theme-mode=\"light\" data-bs-theme=\"light\"",
+    "bodyClass": "aside-enabled",
+    "menuItemClass": "py-2",
+    "menuLinkClass": "",
+    "menuItemTrigger": "click",
+    "menuHasLabel": true,
+    "brandHasLabel": true,
+    "menuHasArrow": true,
+    "menuSubClass": "menu-sub-accordion"
+  },
   "demo9": {
     "name": "demo9",
     "label": "Sales Manager",
