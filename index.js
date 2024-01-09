@@ -593,16 +593,17 @@ const layout = (config) => ({
           req?.user
         )
       : mobileHeader(stylesheet, brand);
-
     return wrapIt(
       config,
-      `id="kt_body" class="${stylesheet.bodyClass}"`,
+      `id="kt_body" class="${stylesheet.bodyClass}" ${
+        stylesheet.bodyAttrs || ""
+      }`,
       headers,
       title,
       //this represents the body
       `
-    <div class="d-flex flex-column flex-root">
-      <div class="page d-flex flex-row flex-column-fluid">
+    <div class="d-flex flex-column flex-root app-root">
+      <div class="app-page page d-flex flex-row flex-column-fluid">
         <!-- call the sidebar here-->
         ${sidebar(brand, sidebarMenu, currentUrl, stylesheet)}
         <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
