@@ -374,7 +374,8 @@ const secondaryMenuHeader = (
   user
 ) => {
   const menuItems = menuSections.map((s) => s.items).flat();
-  console.log("2dary menu", menuItems);
+  const menuItemsNoUser = menuItems.filter((item) => !item.isUser);
+  const userMenuItem = menuItems.find((item) => item.isUser);
   const brandMarkup = a(
     {
       href: "/",
@@ -462,7 +463,7 @@ const secondaryMenuHeader = (
             id: "#kt_header_menu",
             "data-kt-menu": "true",
           },
-          menuItems.map(mkMenuItem)
+          menuItemsNoUser.map(mkMenuItem)
         )
       )
     ),
@@ -485,7 +486,7 @@ const secondaryMenuHeader = (
             )
           )
         ),
-      config.avatar_file &&
+      userMenuItem &&
         div(
           { class: "d-flex align-items-center ms-1 ms-lg-3" },
           div(
@@ -499,7 +500,7 @@ const secondaryMenuHeader = (
               { href: "/auth/settings", class: "menu-link" },
               span(
                 { class: "menu-icon" },
-                user?.[config.avatar_file]
+                config.avatar_file && user?.[config.avatar_file]
                   ? img({
                       src: `/files/resize/40/40/${user?.[config.avatar_file]}`,
                       height: 40,
