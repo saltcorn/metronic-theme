@@ -366,13 +366,15 @@ const authBrand = (config, { name, logo }) =>
     : "";
 
 const secondaryMenuHeader = (
-  menuItems,
+  menuSections,
   stylesheet,
   brand,
   hasNotifications,
   config,
   user
 ) => {
+  const menuItems = menuSections.map((s) => s.items).flat();
+  console.log("2dary menu", menuItems);
   const brandMarkup = a(
     {
       href: "/",
@@ -387,6 +389,47 @@ const secondaryMenuHeader = (
     (stylesheet.brandHasLabel || !brand.logo) &&
       h2({ class: "logo" }, brand.name)
   );
+  const mkMenuItem = (item) =>
+    item.type === "Search"
+      ? form(
+          {
+            action: "/search",
+            class: "menusearch mt-4",
+            method: "get",
+          },
+          i({
+            style: { top: "35px" },
+            class:
+              "fas fa-search fs-2 text-gray-500 position-absolute translate-middle-y ms-0",
+          }),
+
+          input({
+            type: "search",
+            class:
+              "search-input  form-control form-control-flush ps-10 search-bar hasbl",
+            style: { borderBottom: "1px solid gray" },
+            placeholder: item.label,
+            id: "inputq",
+            name: "q",
+            "aria-label": "Search",
+            "aria-describedby": "button-search-submit",
+          })
+        )
+      : div(
+          {
+            //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+            "data-kt-menu-placement": "bottom-start",
+            class:
+              "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+          },
+          a(
+            { href: item.link, class: "menu-link" },
+            span(
+              { class: "menu-link py-3" },
+              span({ class: "menu-title" }, item.label)
+            )
+          )
+        );
   const headerMarkup = div(
     {
       class:
@@ -395,21 +438,23 @@ const secondaryMenuHeader = (
     div(
       { class: "d-flex align-items-stretch", id: "kt_header_nav" },
       div(
-        {
-          class: "header-menu align-items-stretch",
-          "data-kt-drawer": "true",
-          "data-kt-drawer-name": "header-menu",
-          "data-kt-drawer-activate": "{default: true, lg: false}",
-          "data-kt-drawer-overlay": "true",
-          "data-kt-drawer-width": "{default:'200px', '300px': '250px'}",
-          "data-kt-drawer-direction": "end",
-          "data-kt-drawer-toggle": "#kt_header_menu_mobile_toggle",
-          "data-kt-swapper": "true",
-          "data-kt-swapper-mode": "prepend",
-          "data-kt-swapper-parent":
-            "{default: '#kt_body', lg: '#kt_header_nav'}",
-          style: "",
-        },
+        stylesheet.shallowSecondaryHeader
+          ? { class: "header-menu align-items-stretch" }
+          : {
+              class: "header-menu align-items-stretch",
+              "data-kt-drawer": "true",
+              "data-kt-drawer-name": "header-menu",
+              "data-kt-drawer-activate": "{default: true, lg: false}",
+              "data-kt-drawer-overlay": "true",
+              "data-kt-drawer-width": "{default:'200px', '300px': '250px'}",
+              "data-kt-drawer-direction": "end",
+              "data-kt-drawer-toggle": "#kt_header_menu_mobile_toggle",
+              "data-kt-swapper": "true",
+              "data-kt-swapper-mode": "prepend",
+              "data-kt-swapper-parent":
+                "{default: '#kt_body', lg: '#kt_header_nav'}",
+              style: "",
+            },
         div(
           {
             class:
@@ -417,48 +462,7 @@ const secondaryMenuHeader = (
             id: "#kt_header_menu",
             "data-kt-menu": "true",
           },
-          menuItems.map((item) =>
-            item.type === "Search"
-              ? form(
-                  {
-                    action: "/search",
-                    class: "menusearch mt-4",
-                    method: "get",
-                  },
-                  i({
-                    style: { top: "35px" },
-                    class:
-                      "fas fa-search fs-2 text-gray-500 position-absolute translate-middle-y ms-0",
-                  }),
-
-                  input({
-                    type: "search",
-                    class:
-                      "search-input  form-control form-control-flush ps-10 search-bar hasbl",
-                    style: { borderBottom: "1px solid gray" },
-                    placeholder: item.label,
-                    id: "inputq",
-                    name: "q",
-                    "aria-label": "Search",
-                    "aria-describedby": "button-search-submit",
-                  })
-                )
-              : div(
-                  {
-                    //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
-                    "data-kt-menu-placement": "bottom-start",
-                    class:
-                      "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
-                  },
-                  a(
-                    { href: item.link, class: "menu-link" },
-                    span(
-                      { class: "menu-link py-3" },
-                      span({ class: "menu-title" }, item.label)
-                    )
-                  )
-                )
-          )
+          menuItems.map(mkMenuItem)
         )
       )
     ),
@@ -592,6 +596,27 @@ const mobileHeader = (stylesheet, brand) =>
       )
     )
   );
+
+const splitPrimarySecondaryMenu = (menu) => {
+  return {
+    primary: menu
+      .map((mi) => ({
+        ...mi,
+        items: mi.items.filter(
+          (item) => item.location !== "Secondary Menu" && mi.section !== "User"
+        ),
+      }))
+      .filter(({ items }) => items.length),
+    secondary: menu
+      .map((mi) => ({
+        ...mi,
+        items: mi.items.filter(
+          (item) => item.location === "Secondary Menu" || mi.section === "User"
+        ),
+      }))
+      .filter(({ items }) => items.length),
+  };
+};
 const layout = (config) => ({
   hints,
   wrap: ({
@@ -607,19 +632,9 @@ const layout = (config) => ({
   }) => {
     const stylesheet = getStylesheet(config);
     //console.log(menu[1]);
-    const sidebarMenu = menu.map((menusection) => ({
-      ...menusection,
-      items: menusection.items.filter(
-        (item) => !item.location || item.location === "Standard"
-      ),
-    }));
-    //console.log("reuserq", req.user);
-    const headerItems = [];
-    menu.forEach(({ items }) => {
-      items.forEach((item) => {
-        if (item.location === "Secondary Menu") headerItems.push(item);
-      });
-    });
+
+    const { primary, secondary } = splitPrimarySecondaryMenu(menu);
+
     //console.log(headerItems);
     const hasNotifications = menu
       .find((section) => section.isUser)
@@ -627,7 +642,7 @@ const layout = (config) => ({
     //console.log("userItem", hasNotifications);
     const header = config.secondary_menu_header
       ? secondaryMenuHeader(
-          headerItems,
+          secondary,
           stylesheet,
           brand,
           hasNotifications,
@@ -647,7 +662,7 @@ const layout = (config) => ({
     <div class="d-flex flex-column flex-root">
       <div class="page d-flex flex-row flex-column-fluid">
         <!-- call the sidebar here-->
-        ${sidebar(brand, sidebarMenu, currentUrl, stylesheet)}
+        ${sidebar(brand, primary, currentUrl, stylesheet)}
         <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
           ${header}
           <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="margin-top:0px">
