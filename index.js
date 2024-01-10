@@ -503,32 +503,36 @@ const secondaryMenuHeader = (
 
   return div(
     { id: "kt_header", style: "", class: "header align-items-stretch" },
-
-    div(
-      {
-        class:
-          "container-fluid d-flex align-items-stretch justify-content-between",
-      },
-      div(
-        {
-          class: "d-flex align-items-center d-lg-none ms-n1 me-2",
-          title: "Show aside menu",
-        },
-        div(
+    stylesheet.shallowSecondaryHeader
+      ? [
+          div({ clss: "header-brand" }, brandMarkup),
+          div({ class: "toolbar d-flex align-items-stretch" }, headerMarkup),
+        ]
+      : div(
           {
             class:
-              "btn btn-icon btn-active-color-primary w-30px h-30px w-md-40px h-md-40px",
-            id: "kt_aside_mobile_toggle",
+              "container-fluid d-flex align-items-stretch justify-content-between",
           },
-          i({ class: "ki-outline ki-abstract-14 fs-1" })
+          div(
+            {
+              class: "d-flex align-items-center d-lg-none ms-n1 me-2",
+              title: "Show aside menu",
+            },
+            div(
+              {
+                class:
+                  "btn btn-icon btn-active-color-primary w-30px h-30px w-md-40px h-md-40px",
+                id: "kt_aside_mobile_toggle",
+              },
+              i({ class: "ki-outline ki-abstract-14 fs-1" })
+            )
+          ),
+          div(
+            { class: "d-flex align-items-center flex-grow-1 flex-lg-grow-0" },
+            brandMarkup
+          ),
+          headerMarkup
         )
-      ),
-      div(
-        { class: "d-flex align-items-center flex-grow-1 flex-lg-grow-0" },
-        brandMarkup
-      ),
-      headerMarkup
-    )
   );
 };
 const mobileHeader = (stylesheet, brand) =>

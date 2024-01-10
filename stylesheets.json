@@ -42,7 +42,8 @@
     "menuHasLabel": true,
     "brandHasLabel": true,
     "menuHasArrow": true,
-    "menuSubClass": "menu-sub-accordion"
+    "menuSubClass": "menu-sub-accordion",
+    "shallowSecondaryHeader": true
   },
   "demo9": {
     "name": "demo9",
