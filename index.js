@@ -364,9 +364,146 @@ const secondaryMenuHeader = (
   hasNotifications,
   config,
   user
-) =>
-  div(
+) => {
+  const brandMarkup = a(
+    {
+      href: "/",
+      class: "d-lg-none",
+    },
+    brand.logo &&
+      img({
+        src: brand.logo,
+        class: "h-40px",
+        alt: "Logo",
+      }),
+    (stylesheet.brandHasLabel || !brand.logo) &&
+      h2({ class: "logo" }, brand.name)
+  );
+  const headerMarkup = div(
+    {
+      class:
+        "d-flex align-items-stretch justify-content-between flex-lg-grow-1",
+    },
+    div(
+      { class: "d-flex align-items-stretch", id: "kt_header_nav" },
+      div(
+        {
+          class: "header-menu align-items-stretch",
+          "data-kt-drawer": "true",
+          "data-kt-drawer-name": "header-menu",
+          "data-kt-drawer-activate": "{default: true, lg: false}",
+          "data-kt-drawer-overlay": "true",
+          "data-kt-drawer-width": "{default:'200px', '300px': '250px'}",
+          "data-kt-drawer-direction": "end",
+          "data-kt-drawer-toggle": "#kt_header_menu_mobile_toggle",
+          "data-kt-swapper": "true",
+          "data-kt-swapper-mode": "prepend",
+          "data-kt-swapper-parent":
+            "{default: '#kt_body', lg: '#kt_header_nav'}",
+          style: "",
+        },
+        div(
+          {
+            class:
+              "menu menu-rounded menu-column menu-lg-row menu-active-bg menu-state-primary menu-title-gray-700 menu-arrow-gray-500 fw-semibold my-5 my-lg-0 px-2 px-lg-0 align-items-stretch",
+            id: "#kt_header_menu",
+            "data-kt-menu": "true",
+          },
+          menuItems.map((item) =>
+            item.type === "Search"
+              ? form(
+                  {
+                    action: "/search",
+                    class: "menusearch mt-4",
+                    method: "get",
+                  },
+                  i({
+                    style: { top: "35px" },
+                    class:
+                      "fas fa-search fs-2 text-gray-500 position-absolute translate-middle-y ms-0",
+                  }),
+
+                  input({
+                    type: "search",
+                    class:
+                      "search-input  form-control form-control-flush ps-10 search-bar hasbl",
+                    style: { borderBottom: "1px solid gray" },
+                    placeholder: item.label,
+                    id: "inputq",
+                    name: "q",
+                    "aria-label": "Search",
+                    "aria-describedby": "button-search-submit",
+                  })
+                )
+              : div(
+                  {
+                    //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+                    "data-kt-menu-placement": "bottom-start",
+                    class:
+                      "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+                  },
+                  a(
+                    { href: item.link, class: "menu-link" },
+                    span(
+                      { class: "menu-link py-3" },
+                      span({ class: "menu-title" }, item.label)
+                    )
+                  )
+                )
+          )
+        )
+      )
+    ),
+    div(
+      { class: "d-flex align-items-stretch flex-shrink-0" },
+
+      hasNotifications &&
+        div(
+          { class: "d-flex align-items-stretch ms-1 ms-lg-3 mt-4" },
+          div(
+            {
+              //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+              "data-kt-menu-placement": "bottom-start",
+              class:
+                "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+            },
+            a(
+              { href: "/notifications", class: "menu-link" },
+              span({ class: "menu-icon" }, i({ class: `fs-2 fa fa-bell` }))
+            )
+          )
+        ),
+      config.avatar_file &&
+        div(
+          { class: "d-flex align-items-center ms-1 ms-lg-3" },
+          div(
+            {
+              //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+              "data-kt-menu-placement": "bottom-start",
+              class:
+                "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+            },
+            a(
+              { href: "/auth/settings", class: "menu-link" },
+              span(
+                { class: "menu-icon" },
+                user?.[config.avatar_file]
+                  ? img({
+                      src: `/files/resize/40/40/${user?.[config.avatar_file]}`,
+                      height: 40,
+                      width: 40,
+                    })
+                  : i({ class: `fs-2 fa fa-user` })
+              )
+            )
+          )
+        )
+    )
+  );
+
+  return div(
     { id: "kt_header", style: "", class: "header align-items-stretch" },
+
     div(
       {
         class:
@@ -388,146 +525,12 @@ const secondaryMenuHeader = (
       ),
       div(
         { class: "d-flex align-items-center flex-grow-1 flex-lg-grow-0" },
-        a(
-          {
-            href: "/",
-            class: "d-lg-none",
-          },
-          brand.logo &&
-            img({
-              src: brand.logo,
-              class: "h-40px",
-              alt: "Logo",
-            }),
-          (stylesheet.brandHasLabel || !brand.logo) &&
-            h2({ class: "logo" }, brand.name)
-        )
+        brandMarkup
       ),
-      div(
-        {
-          class:
-            "d-flex align-items-stretch justify-content-between flex-lg-grow-1",
-        },
-        div(
-          { class: "d-flex align-items-stretch", id: "kt_header_nav" },
-          div(
-            {
-              class: "header-menu align-items-stretch",
-              "data-kt-drawer": "true",
-              "data-kt-drawer-name": "header-menu",
-              "data-kt-drawer-activate": "{default: true, lg: false}",
-              "data-kt-drawer-overlay": "true",
-              "data-kt-drawer-width": "{default:'200px', '300px': '250px'}",
-              "data-kt-drawer-direction": "end",
-              "data-kt-drawer-toggle": "#kt_header_menu_mobile_toggle",
-              "data-kt-swapper": "true",
-              "data-kt-swapper-mode": "prepend",
-              "data-kt-swapper-parent":
-                "{default: '#kt_body', lg: '#kt_header_nav'}",
-              style: "",
-            },
-            div(
-              {
-                class:
-                  "menu menu-rounded menu-column menu-lg-row menu-active-bg menu-state-primary menu-title-gray-700 menu-arrow-gray-500 fw-semibold my-5 my-lg-0 px-2 px-lg-0 align-items-stretch",
-                id: "#kt_header_menu",
-                "data-kt-menu": "true",
-              },
-              menuItems.map((item) =>
-                item.type === "Search"
-                  ? form(
-                      {
-                        action: "/search",
-                        class: "menusearch mt-4",
-                        method: "get",
-                      },
-                      i({
-                        style: { top: "35px" },
-                        class:
-                          "fas fa-search fs-2 text-gray-500 position-absolute translate-middle-y ms-0",
-                      }),
-
-                      input({
-                        type: "search",
-                        class:
-                          "search-input  form-control form-control-flush ps-10 search-bar hasbl",
-                        style: { borderBottom: "1px solid gray" },
-                        placeholder: item.label,
-                        id: "inputq",
-                        name: "q",
-                        "aria-label": "Search",
-                        "aria-describedby": "button-search-submit",
-                      })
-                    )
-                  : div(
-                      {
-                        //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
-                        "data-kt-menu-placement": "bottom-start",
-                        class:
-                          "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
-                      },
-                      a(
-                        { href: item.link, class: "menu-link" },
-                        span(
-                          { class: "menu-link py-3" },
-                          span({ class: "menu-title" }, item.label)
-                        )
-                      )
-                    )
-              )
-            )
-          )
-        ),
-        div(
-          { class: "d-flex align-items-stretch flex-shrink-0" },
-
-          hasNotifications &&
-            div(
-              { class: "d-flex align-items-stretch ms-1 ms-lg-3 mt-4" },
-              div(
-                {
-                  //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
-                  "data-kt-menu-placement": "bottom-start",
-                  class:
-                    "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
-                },
-                a(
-                  { href: "/notifications", class: "menu-link" },
-                  span({ class: "menu-icon" }, i({ class: `fs-2 fa fa-bell` }))
-                )
-              )
-            ),
-          config.avatar_file &&
-            div(
-              { class: "d-flex align-items-center ms-1 ms-lg-3" },
-              div(
-                {
-                  //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
-                  "data-kt-menu-placement": "bottom-start",
-                  class:
-                    "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
-                },
-                a(
-                  { href: "/auth/settings", class: "menu-link" },
-                  span(
-                    { class: "menu-icon" },
-                    user?.[config.avatar_file]
-                      ? img({
-                          src: `/files/resize/40/40/${
-                            user?.[config.avatar_file]
-                          }`,
-                          height: 40,
-                          width: 40,
-                        })
-                      : i({ class: `fs-2 fa fa-user` })
-                  )
-                )
-              )
-            )
-        )
-      )
+      headerMarkup
     )
   );
+};
 const mobileHeader = (stylesheet, brand) =>
   div(
     { class: "header-mobile py-3" },
