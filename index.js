@@ -376,6 +376,7 @@ const secondaryMenuHeader = (
   const menuItems = menuSections.map((s) => s.items).flat();
   const menuItemsNoUser = menuItems.filter((item) => !item.isUser);
   const userMenuItem = menuItems.find((item) => item.isUser);
+  console.log("usermenu", userMenuItem);
   const brandMarkup = a(
     {
       href: "/",
@@ -433,8 +434,10 @@ const secondaryMenuHeader = (
         );
   const headerMarkup = div(
     {
-      class:
+      class: [
         "d-flex align-items-stretch justify-content-between flex-lg-grow-1",
+        stylesheet.shallowSecondaryHeader && "mt-1",
+      ],
     },
     div(
       { class: "d-flex align-items-stretch", id: "kt_header_nav" },
@@ -487,6 +490,48 @@ const secondaryMenuHeader = (
           )
         ),
       userMenuItem &&
+        div(
+          { class: "app-navbar-item", id: "kt_header_user_menu_toggle" },
+          div(
+            {
+              class: "mt-4 me-5 cursor-pointer symbol symbol-40px",
+              "data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+              "data-kt-menu-attach": "parent",
+              "data-kt-menu-placement": "bottom-end",
+            },
+            config.avatar_file && user?.[config.avatar_file]
+              ? img({
+                  src: `/files/resize/40/40/${user?.[config.avatar_file]}`,
+                  height: 40,
+                  width: 40,
+                })
+              : i({ class: `fs-2 fa fa-user` })
+          ),
+          div(
+            {
+              class:
+                "menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px",
+              "data-kt-menu": "true",
+              style: "",
+            },
+            (userMenuItem?.subitems || []).map((si) =>
+              div(
+                { class: "menu-item px-5" },
+                si.link
+                  ? a(
+                      {
+                        href: si.link,
+                        class: ["menu-link px-3", si.class],
+                      },
+                      si.icon && i({ class: [si.icon, "me-2"] }),
+                      si.label
+                    )
+                  : span({ class: ["px-5", si.class] }, si.label)
+              )
+            )
+          )
+        ),
+      false &&
         div(
           { class: "d-flex align-items-center ms-1 ms-lg-3" },
           div(
