@@ -504,7 +504,7 @@ const secondaryMenuHeader = (
                   height: 40,
                   width: 40,
                 })
-              : i({ class: `fs-2 fa fa-user` })
+              : i({ class: `fs-2 fa fa-user mt-3` })
           ),
           div(
             {
