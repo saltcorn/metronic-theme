@@ -371,7 +371,8 @@ const secondaryMenuHeader = (
   brand,
   hasNotifications,
   config,
-  user
+  user,
+  title
 ) => {
   const menuItems = menuSections.map((s) => s.items).flat();
   const menuItemsNoUser = menuItems.filter((item) => !item.isUser);
@@ -434,10 +435,19 @@ const secondaryMenuHeader = (
   const headerMarkup = div(
     {
       class: [
-        "d-flex align-items-stretch justify-content-between flex-lg-grow-1",
-        stylesheet.shallowSecondaryHeader && "mt-1",
+        stylesheet.shallowSecondaryHeader
+          ? "container-xxl  py-6 py-lg-0 d-flex flex-column flex-lg-row align-items-lg-stretch justify-content-lg-between mt-1"
+          : "d-flex align-items-stretch justify-content-between flex-lg-grow-1",
       ],
     },
+    config.page_title_header &&
+      div(
+        { class: "page-title d-flex justify-content-center flex-column me-5" },
+        h1(
+          { class: "d-flex flex-column text-gray-900 fw-bold fs-3 mb-0" },
+          title
+        )
+      ),
     div(
       { class: "d-flex align-items-stretch", id: "kt_header_nav" },
       div(
@@ -692,7 +702,8 @@ const layout = (config) => ({
           brand,
           hasNotifications,
           config,
-          req?.user
+          req?.user,
+          title
         )
       : mobileHeader(stylesheet, brand);
     return wrapIt(
@@ -875,6 +886,12 @@ const configuration_workflow = () =>
                 name: "secondary_menu_header",
                 label: "Secondary menu header",
                 type: "Bool",
+              },
+              {
+                name: "page_title_header",
+                label: "Page title in header",
+                type: "Bool",
+                showIf: { secondary_menu_header: true },
               },
               {
                 name: "avatar_file",
