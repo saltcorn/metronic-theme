@@ -512,7 +512,7 @@ const secondaryMenuHeader = (
     { id: "kt_header", style: "", class: "header align-items-stretch" },
     stylesheet.shallowSecondaryHeader
       ? [
-          div({ clss: "header-brand" }, brandMarkup),
+          div({ class: "header-brand" }, brandMarkup),
           div({ class: "toolbar d-flex align-items-stretch" }, headerMarkup),
         ]
       : div(
