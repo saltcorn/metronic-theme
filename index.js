@@ -422,7 +422,7 @@ const secondaryMenuHeader = (
             //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
             "data-kt-menu-placement": "bottom-start",
             class:
-              "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+              "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2 mt-2",
           },
           a(
             { href: item.link, class: "menu-link" },
