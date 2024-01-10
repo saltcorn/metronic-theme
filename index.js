@@ -513,7 +513,34 @@ const secondaryMenuHeader = (
     { id: "kt_header", style: "", class: "header align-items-stretch" },
     stylesheet.shallowSecondaryHeader
       ? [
-          div({ class: "header-brand" }, brandMarkup),
+          div(
+            { class: "header-brand" },
+            brandMarkup,
+            div(
+              {
+                id: "kt_aside_toggle",
+                class:
+                  "btn btn-icon w-auto px-0 btn-active-color-primary aside-minimize",
+                "data-kt-toggle": "true",
+                "data-kt-toggle-state": "active",
+                "data-kt-toggle-target": "body",
+                "data-kt-toggle-name": "aside-minimize",
+              },
+              i(
+                {
+                  class:
+                    "ki-duotone ki-entrance-right fs-1 me-n1 minimize-default",
+                },
+                span({ class: "path1" }),
+                span({ class: "path2" })
+              ),
+              i(
+                { class: "ki-duotone ki-entrance-left fs-1 minimize-active" },
+                span({ class: "path1" }),
+                span({ class: "path2" })
+              )
+            )
+          ),
           div({ class: "toolbar d-flex align-items-stretch" }, headerMarkup),
         ]
       : div(
