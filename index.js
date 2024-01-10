@@ -164,13 +164,14 @@ const sidebar = (brand, sections, currentUrl, stylesheet) =>
       id: "kt_aside",
       ...stylesheet.attributes.kt_aside,
     },
-    div(
-      {
-        ...stylesheet.attributes.kt_aside_logo,
-        id: "kt_aside_logo",
-      },
-      brandLogo(stylesheet, brand)
-    ),
+    !stylesheet.shallowSecondaryHeader &&
+      div(
+        {
+          ...stylesheet.attributes.kt_aside_logo,
+          id: "kt_aside_logo",
+        },
+        brandLogo(stylesheet, brand)
+      ),
     div(
       {
         ...stylesheet.attributes.kt_aside_menu,
@@ -309,8 +310,15 @@ const active = (currentUrl, item) =>
   (item.subitems &&
     item.subitems.some((si) => si.link && currentUrl.startsWith(si.link)));
 
-const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
-<html lang="en">
+const wrapIt = (
+  config,
+  bodyAttr,
+  headers,
+  title,
+  body,
+  stylesheet
+) => `<!doctype html>
+<html lang="en" ${stylesheet?.htmlAttrs || ""}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -358,60 +366,85 @@ const authBrand = (config, { name, logo }) =>
     : "";
 
 const secondaryMenuHeader = (
-  menuItems,
+  menuSections,
   stylesheet,
   brand,
   hasNotifications,
   config,
   user
-) =>
-  div(
-    { id: "kt_header", style: "", class: "header align-items-stretch" },
-    div(
-      {
-        class:
-          "container-fluid d-flex align-items-stretch justify-content-between",
-      },
-      div(
-        {
-          class: "d-flex align-items-center d-lg-none ms-n1 me-2",
-          title: "Show aside menu",
-        },
-        div(
+) => {
+  const menuItems = menuSections.map((s) => s.items).flat();
+  const menuItemsNoUser = menuItems.filter((item) => !item.isUser);
+  const userMenuItem = menuItems.find((item) => item.isUser);
+  console.log("usermenu", userMenuItem);
+  const brandMarkup = a(
+    {
+      href: "/",
+      class: stylesheet.shallowSecondaryHeader ? false : "d-lg-none",
+    },
+    brand.logo &&
+      img({
+        src: brand.logo,
+        class: "h-40px",
+        alt: "Logo",
+      }),
+    (stylesheet.brandHasLabel || !brand.logo) &&
+      h2({ class: "logo" }, brand.name)
+  );
+  const mkMenuItem = (item) =>
+    item.type === "Search"
+      ? form(
           {
+            action: "/search",
+            class: "menusearch mt-4",
+            method: "get",
+          },
+          i({
+            style: { top: "35px" },
             class:
-              "btn btn-icon btn-active-color-primary w-30px h-30px w-md-40px h-md-40px",
-            id: "kt_aside_mobile_toggle",
-          },
-          i({ class: "ki-outline ki-abstract-14 fs-1" })
+              "fas fa-search fs-2 text-gray-500 position-absolute translate-middle-y ms-0",
+          }),
+
+          input({
+            type: "search",
+            class:
+              "search-input  form-control form-control-flush ps-10 search-bar hasbl",
+            style: { borderBottom: "1px solid gray" },
+            placeholder: item.label,
+            id: "inputq",
+            name: "q",
+            "aria-label": "Search",
+            "aria-describedby": "button-search-submit",
+          })
         )
-      ),
-      div(
-        { class: "d-flex align-items-center flex-grow-1 flex-lg-grow-0" },
-        a(
+      : div(
           {
-            href: "/",
-            class: "d-lg-none",
+            //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+            "data-kt-menu-placement": "bottom-start",
+            class:
+              "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
           },
-          brand.logo &&
-            img({
-              src: brand.logo,
-              class: "h-40px",
-              alt: "Logo",
-            }),
-          (stylesheet.brandHasLabel || !brand.logo) &&
-            h2({ class: "logo" }, brand.name)
-        )
-      ),
+          a(
+            { href: item.link, class: "menu-link" },
+            span(
+              { class: "menu-link py-3" },
+              span({ class: "menu-title" }, item.label)
+            )
+          )
+        );
+  const headerMarkup = div(
+    {
+      class: [
+        "d-flex align-items-stretch justify-content-between flex-lg-grow-1",
+        stylesheet.shallowSecondaryHeader && "mt-1",
+      ],
+    },
+    div(
+      { class: "d-flex align-items-stretch", id: "kt_header_nav" },
       div(
-        {
-          class:
-            "d-flex align-items-stretch justify-content-between flex-lg-grow-1",
-        },
-        div(
-          { class: "d-flex align-items-stretch", id: "kt_header_nav" },
-          div(
-            {
+        stylesheet.shallowSecondaryHeader
+          ? { class: "header-menu align-items-stretch" }
+          : {
               class: "header-menu align-items-stretch",
               "data-kt-drawer": "true",
               "data-kt-drawer-name": "header-menu",
@@ -426,108 +459,167 @@ const secondaryMenuHeader = (
                 "{default: '#kt_body', lg: '#kt_header_nav'}",
               style: "",
             },
-            div(
-              {
-                class:
-                  "menu menu-rounded menu-column menu-lg-row menu-active-bg menu-state-primary menu-title-gray-700 menu-arrow-gray-500 fw-semibold my-5 my-lg-0 px-2 px-lg-0 align-items-stretch",
-                id: "#kt_header_menu",
-                "data-kt-menu": "true",
-              },
-              menuItems.map((item) =>
-                item.type === "Search"
-                  ? form(
-                      {
-                        action: "/search",
-                        class: "menusearch mt-4",
-                        method: "get",
-                      },
-                      i({
-                        style: { top: "35px" },
-                        class:
-                          "fas fa-search fs-2 text-gray-500 position-absolute translate-middle-y ms-0",
-                      }),
+        div(
+          {
+            class:
+              "menu menu-rounded menu-column menu-lg-row menu-active-bg menu-state-primary menu-title-gray-700 menu-arrow-gray-500 fw-semibold my-5 my-lg-0 px-2 px-lg-0 align-items-stretch",
+            id: "#kt_header_menu",
+            "data-kt-menu": "true",
+          },
+          menuItemsNoUser.map(mkMenuItem)
+        )
+      )
+    ),
+    div(
+      { class: "d-flex align-items-stretch flex-shrink-0" },
 
-                      input({
-                        type: "search",
-                        class:
-                          "search-input  form-control form-control-flush ps-10 search-bar hasbl",
-                        style: { borderBottom: "1px solid gray" },
-                        placeholder: item.label,
-                        id: "inputq",
-                        name: "q",
-                        "aria-label": "Search",
-                        "aria-describedby": "button-search-submit",
-                      })
-                    )
-                  : div(
+      hasNotifications &&
+        div(
+          { class: "d-flex align-items-stretch ms-1 ms-lg-3 mt-4" },
+          div(
+            {
+              //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+              "data-kt-menu-placement": "bottom-start",
+              class:
+                "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+            },
+            a(
+              { href: "/notifications", class: "menu-link" },
+              span({ class: "menu-icon" }, i({ class: `fs-2 fa fa-bell` }))
+            )
+          )
+        ),
+      userMenuItem &&
+        div(
+          { class: "app-navbar-item", id: "kt_header_user_menu_toggle" },
+          div(
+            {
+              class: "mt-4 me-5 cursor-pointer symbol symbol-40px",
+              "data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+              "data-kt-menu-attach": "parent",
+              "data-kt-menu-placement": "bottom-end",
+            },
+            config.avatar_file && user?.[config.avatar_file]
+              ? img({
+                  src: `/files/resize/40/40/${user?.[config.avatar_file]}`,
+                  height: 40,
+                  width: 40,
+                })
+              : i({ class: `fs-2 fa fa-user` })
+          ),
+          div(
+            {
+              class:
+                "menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px",
+              "data-kt-menu": "true",
+              style: "",
+            },
+            (userMenuItem?.subitems || []).map((si) =>
+              div(
+                { class: "menu-item px-5" },
+                si.link
+                  ? a(
                       {
-                        //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
-                        "data-kt-menu-placement": "bottom-start",
-                        class:
-                          "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+                        href: si.link,
+                        class: ["menu-link px-3", si.class],
                       },
-                      a(
-                        { href: item.link, class: "menu-link" },
-                        span(
-                          { class: "menu-link py-3" },
-                          span({ class: "menu-title" }, item.label)
-                        )
-                      )
+                      si.icon && i({ class: [si.icon, "me-2"] }),
+                      si.label
                     )
+                  : span({ class: ["px-5", si.class] }, si.label)
               )
             )
           )
         ),
+      false &&
         div(
-          { class: "d-flex align-items-stretch flex-shrink-0" },
-
-          hasNotifications &&
-            div(
-              { class: "d-flex align-items-stretch ms-1 ms-lg-3 mt-4" },
-              div(
-                {
-                  //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
-                  "data-kt-menu-placement": "bottom-start",
-                  class:
-                    "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
-                },
-                a(
-                  { href: "/notifications", class: "menu-link" },
-                  span({ class: "menu-icon" }, i({ class: `fs-2 fa fa-bell` }))
-                )
-              )
-            ),
-          config.avatar_file &&
-            div(
-              { class: "d-flex align-items-center ms-1 ms-lg-3" },
-              div(
-                {
-                  //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
-                  "data-kt-menu-placement": "bottom-start",
-                  class:
-                    "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
-                },
-                a(
-                  { href: "/auth/settings", class: "menu-link" },
-                  span(
-                    { class: "menu-icon" },
-                    user?.[config.avatar_file]
-                      ? img({
-                          src: `/files/resize/40/40/${
-                            user?.[config.avatar_file]
-                          }`,
-                          height: 40,
-                          width: 40,
-                        })
-                      : i({ class: `fs-2 fa fa-user` })
-                  )
-                )
+          { class: "d-flex align-items-center ms-1 ms-lg-3" },
+          div(
+            {
+              //"data-kt-menu-trigger": "{default: 'click', lg: 'hover'}",
+              "data-kt-menu-placement": "bottom-start",
+              class:
+                "menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2",
+            },
+            a(
+              { href: "/auth/settings", class: "menu-link" },
+              span(
+                { class: "menu-icon" },
+                config.avatar_file && user?.[config.avatar_file]
+                  ? img({
+                      src: `/files/resize/40/40/${user?.[config.avatar_file]}`,
+                      height: 40,
+                      width: 40,
+                    })
+                  : i({ class: `fs-2 fa fa-user` })
               )
             )
+          )
         )
-      )
     )
   );
+
+  return div(
+    { id: "kt_header", style: "", class: "header align-items-stretch" },
+    stylesheet.shallowSecondaryHeader
+      ? [
+          div(
+            { class: "header-brand" },
+            brandMarkup,
+            div(
+              {
+                id: "kt_aside_toggle",
+                class:
+                  "btn btn-icon w-auto px-0 btn-active-color-primary aside-minimize",
+                "data-kt-toggle": "true",
+                "data-kt-toggle-state": "active",
+                "data-kt-toggle-target": "body",
+                "data-kt-toggle-name": "aside-minimize",
+              },
+              i(
+                {
+                  class:
+                    "ki-duotone ki-entrance-right fs-1 me-n1 minimize-default",
+                },
+                span({ class: "path1" }),
+                span({ class: "path2" })
+              ),
+              i(
+                { class: "ki-duotone ki-entrance-left fs-1 minimize-active" },
+                span({ class: "path1" }),
+                span({ class: "path2" })
+              )
+            )
+          ),
+          div({ class: "toolbar d-flex align-items-stretch" }, headerMarkup),
+        ]
+      : div(
+          {
+            class:
+              "container-fluid d-flex align-items-stretch justify-content-between",
+          },
+          div(
+            {
+              class: "d-flex align-items-center d-lg-none ms-n1 me-2",
+              title: "Show aside menu",
+            },
+            div(
+              {
+                class:
+                  "btn btn-icon btn-active-color-primary w-30px h-30px w-md-40px h-md-40px",
+                id: "kt_aside_mobile_toggle",
+              },
+              i({ class: "ki-outline ki-abstract-14 fs-1" })
+            )
+          ),
+          div(
+            { class: "d-flex align-items-center flex-grow-1 flex-lg-grow-0" },
+            brandMarkup
+          ),
+          headerMarkup
+        )
+  );
+};
 const mobileHeader = (stylesheet, brand) =>
   div(
     { class: "header-mobile py-3" },
@@ -550,6 +642,27 @@ const mobileHeader = (stylesheet, brand) =>
       )
     )
   );
+
+const splitPrimarySecondaryMenu = (menu) => {
+  return {
+    primary: menu
+      .map((mi) => ({
+        ...mi,
+        items: mi.items.filter(
+          (item) => item.location !== "Secondary Menu" && mi.section !== "User"
+        ),
+      }))
+      .filter(({ items }) => items.length),
+    secondary: menu
+      .map((mi) => ({
+        ...mi,
+        items: mi.items.filter(
+          (item) => item.location === "Secondary Menu" || mi.section === "User"
+        ),
+      }))
+      .filter(({ items }) => items.length),
+  };
+};
 const layout = (config) => ({
   hints,
   wrap: ({
@@ -565,19 +678,9 @@ const layout = (config) => ({
   }) => {
     const stylesheet = getStylesheet(config);
     //console.log(menu[1]);
-    const sidebarMenu = menu.map((menusection) => ({
-      ...menusection,
-      items: menusection.items.filter(
-        (item) => !item.location || item.location === "Standard"
-      ),
-    }));
-    //console.log("reuserq", req.user);
-    const headerItems = [];
-    menu.forEach(({ items }) => {
-      items.forEach((item) => {
-        if (item.location === "Secondary Menu") headerItems.push(item);
-      });
-    });
+
+    const { primary, secondary } = splitPrimarySecondaryMenu(menu);
+
     //console.log(headerItems);
     const hasNotifications = menu
       .find((section) => section.isUser)
@@ -585,7 +688,7 @@ const layout = (config) => ({
     //console.log("userItem", hasNotifications);
     const header = config.secondary_menu_header
       ? secondaryMenuHeader(
-          headerItems,
+          secondary,
           stylesheet,
           brand,
           hasNotifications,
@@ -593,10 +696,11 @@ const layout = (config) => ({
           req?.user
         )
       : mobileHeader(stylesheet, brand);
-
     return wrapIt(
       config,
-      `id="kt_body" class="${stylesheet.bodyClass}"`,
+      `id="kt_body" class="${stylesheet.bodyClass}" ${
+        stylesheet.bodyAttrs || ""
+      }`,
       headers,
       title,
       //this represents the body
@@ -604,7 +708,7 @@ const layout = (config) => ({
     <div class="d-flex flex-column flex-root">
       <div class="page d-flex flex-row flex-column-fluid">
         <!-- call the sidebar here-->
-        ${sidebar(brand, sidebarMenu, currentUrl, stylesheet)}
+        ${sidebar(brand, primary, currentUrl, stylesheet)}
         <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
           ${header}
           <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="margin-top:0px">
@@ -617,7 +721,8 @@ const layout = (config) => ({
         </div>
       </div>    
     </div>
-    `
+    `,
+      stylesheet
     );
   },
   renderBody: ({ title, body, alerts, role }) =>
