@@ -376,7 +376,6 @@ const secondaryMenuHeader = (
   const menuItems = menuSections.map((s) => s.items).flat();
   const menuItemsNoUser = menuItems.filter((item) => !item.isUser);
   const userMenuItem = menuItems.find((item) => item.isUser);
-  console.log("usermenu", userMenuItem);
   const brandMarkup = a(
     {
       href: "/",
