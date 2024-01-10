@@ -34,7 +34,7 @@
       },
       "menu_item": { "data-kt-enu-placement": "right-start" }
     },
-    "bodyAttrs": "data-bs-theme-mode=\"light\" data-bs-theme=\"light\"",
+    "htmlAttrs": "data-bs-theme-mode=\"light\"",
     "bodyClass": "aside-enabled",
     "menuItemClass": "py-2",
     "menuLinkClass": "",

@@ -309,8 +309,15 @@ const active = (currentUrl, item) =>
   (item.subitems &&
     item.subitems.some((si) => si.link && currentUrl.startsWith(si.link)));
 
-const wrapIt = (config, bodyAttr, headers, title, body) => `<!doctype html>
-<html lang="en">
+const wrapIt = (
+  config,
+  bodyAttr,
+  headers,
+  title,
+  body,
+  stylesheet
+) => `<!doctype html>
+<html lang="en" ${stylesheet?.htmlAttrs || ""}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -625,7 +632,8 @@ const layout = (config) => ({
         </div>
       </div>    
     </div>
-    `
+    `,
+      stylesheet
     );
   },
   renderBody: ({ title, body, alerts, role }) =>
