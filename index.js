@@ -164,13 +164,14 @@ const sidebar = (brand, sections, currentUrl, stylesheet) =>
       id: "kt_aside",
       ...stylesheet.attributes.kt_aside,
     },
-    div(
-      {
-        ...stylesheet.attributes.kt_aside_logo,
-        id: "kt_aside_logo",
-      },
-      brandLogo(stylesheet, brand)
-    ),
+    !stylesheet.shallowSecondaryHeader &&
+      div(
+        {
+          ...stylesheet.attributes.kt_aside_logo,
+          id: "kt_aside_logo",
+        },
+        brandLogo(stylesheet, brand)
+      ),
     div(
       {
         ...stylesheet.attributes.kt_aside_menu,
@@ -375,7 +376,7 @@ const secondaryMenuHeader = (
   const brandMarkup = a(
     {
       href: "/",
-      class: "d-lg-none",
+      class: stylesheet.shallowSecondaryHeader ? false : "d-lg-none",
     },
     brand.logo &&
       img({
