@@ -598,6 +598,23 @@ const secondaryMenuHeader = (
                 span({ class: "path1" }),
                 span({ class: "path2" })
               )
+            ),
+            div(
+              {
+                class: "d-flex align-items-center d-lg-none me-n2",
+                title: "Show aside menu",
+              },
+              div(
+                {
+                  class: "btn btn-icon btn-active-color-primary w-30px h-30px",
+                  id: "kt_aside_mobile_toggle",
+                },
+                i(
+                  { class: "ki-duotone ki-abstract-14 fs-1" },
+                  span({ class: "path1" }),
+                  span({ class: "path2" })
+                )
+              )
             )
           ),
           div({ class: "toolbar d-flex align-items-stretch" }, headerMarkup),
