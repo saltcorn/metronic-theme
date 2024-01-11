@@ -514,6 +514,15 @@ const secondaryMenuHeader = (
                   height: 40,
                   width: 40,
                 })
+              : user?.email
+              ? div(
+                  {
+                    class: "h3",
+                    style:
+                      "border-radius: 50%; background-color: #d5d5d5; width: 40px; height:40px; display: flex;align-items: center; justify-content: center;",
+                  },
+                  user.email[0].toUpperCase()
+                )
               : i({ class: `fs-2 fa fa-user mt-3` })
           ),
           div(
