@@ -131,7 +131,7 @@ const blockDispatch = (config) => ({
         ),
 });
 
-const renderBody = (title, body, alerts, config, role) =>
+const renderBody = (title, body, alerts, config, role, req) =>
   renderLayout({
     blockDispatch: blockDispatch(config),
     role,
@@ -141,6 +141,7 @@ const renderBody = (title, body, alerts, config, role) =>
         : body,
     alerts,
     hints,
+    req,
   });
 
 const brandLogo = (stylesheet, brand) =>
@@ -750,7 +751,7 @@ const layout = (config) => ({
           <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="margin-top:0px">
             <div class="container-xxl" id="kt_content_container">
                 <div id="page-inner-content">
-                  ${renderBody(title, body, alerts, config, role)}
+                  ${renderBody(title, body, alerts, config, role, req)}
                 </div>
             </div>
           </div>
@@ -761,8 +762,8 @@ const layout = (config) => ({
       stylesheet
     );
   },
-  renderBody: ({ title, body, alerts, role }) =>
-    renderBody(title, body, alerts, config, role),
+  renderBody: ({ title, body, alerts, role, req }) =>
+    renderBody(title, body, alerts, config, role, req),
   authWrap: ({
     title,
     alerts, //TODO
