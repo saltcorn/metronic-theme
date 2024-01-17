@@ -681,7 +681,7 @@ const mobileHeader = (stylesheet, brand) =>
 
 const splitPrimarySecondaryMenu = (menu) => {
   return {
-    primary: menu
+    primary: (menu || [])
       .map((mi) => ({
         ...mi,
         items: mi.items.filter(
@@ -689,7 +689,7 @@ const splitPrimarySecondaryMenu = (menu) => {
         ),
       }))
       .filter(({ items }) => items.length),
-    secondary: menu
+    secondary: (menu || [])
       .map((mi) => ({
         ...mi,
         items: mi.items.filter(
@@ -719,7 +719,7 @@ const layout = (config) => ({
 
     //console.log(headerItems);
     const hasNotifications = menu
-      .find((section) => section.isUser)
+      ?.find((section) => section.isUser)
       ?.items?.[0]?.subitems?.find?.((item) => item.link === "/notifications");
     //console.log("userItem", hasNotifications);
     const header = config.secondary_menu_header
