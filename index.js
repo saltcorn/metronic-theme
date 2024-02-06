@@ -28,6 +28,7 @@ const renderLayout = require("@saltcorn/markup/layout");
 const Field = require("@saltcorn/data/models/field");
 const Table = require("@saltcorn/data/models/table");
 const Form = require("@saltcorn/data/models/form");
+const File = require("@saltcorn/data/models/file");
 const View = require("@saltcorn/data/models/view");
 const db = require("@saltcorn/data/db");
 const Workflow = require("@saltcorn/data/models/workflow");
@@ -331,9 +332,13 @@ const wrapIt = (
 		<link href="/plugins/public/metronic-theme${verstring}/${
   config.stylesheet || "demo9"
 }/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="/plugins/public/metronic-theme${verstring}/${
-  config.stylesheet || "demo9"
-}/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+		<link href="${
+      config.alt_css_file
+        ? `/files/serve/${config.alt_css_file}`
+        : `/plugins/public/metronic-theme${verstring}/${
+            config.stylesheet || "demo9"
+          }/assets/css/style.bundle.css`
+    }" rel="stylesheet" type="text/css" />
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     
@@ -884,6 +889,10 @@ const configuration_workflow = () =>
         name: "stylesheet",
         form: async () => {
           const userFields = Table.findOne("users").fields;
+          const cssfiles = await File.find({
+            mime_super: "text",
+            mime_sub: "css",
+          });
           return new Form({
             blurb:
               'Note that this is a Commercial theme, and requires a License from <a href="https://keenthemes.com/metronic">KeenThemes</a> ',
@@ -907,6 +916,18 @@ const configuration_workflow = () =>
                       label,
                     })
                   ),
+                },
+              },
+              {
+                name: "alt_css_file",
+                label: "Alternative CSS file",
+                sublabel: "Use this CSS stylesheet file instead",
+                type: "String",
+                attributes: {
+                  options: cssfiles.map((fl) => ({
+                    label: fl.filename,
+                    name: fl.path_to_serve,
+                  })),
                 },
               },
               {
