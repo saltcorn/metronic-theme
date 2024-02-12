@@ -150,13 +150,14 @@ const brandLogo = (stylesheet, brand) =>
     {
       href: "/",
     },
-    brand.logo &&
+    brand?.logo &&
       img({
         src: brand.logo,
         class: "h-40px",
         alt: "Logo",
       }),
-    (stylesheet.brandHasLabel || !brand.logo) &&
+    brand &&
+      (stylesheet.brandHasLabel || !brand.logo) &&
       h2({ class: "logo" }, brand.name)
   );
 
@@ -383,20 +384,22 @@ const secondaryMenuHeader = (
   const menuItems = menuSections.map((s) => s.items).flat();
   const menuItemsNoUser = menuItems.filter((item) => !item.isUser);
   const userMenuItem = menuItems.find((item) => item.isUser);
-  const brandMarkup = a(
-    {
-      href: "/",
-      class: stylesheet.shallowSecondaryHeader ? false : "d-lg-none",
-    },
-    brand.logo &&
-      img({
-        src: brand.logo,
-        class: "h-40px",
-        alt: "Logo",
-      }),
-    (stylesheet.brandHasLabel || !brand.logo) &&
-      h2({ class: "logo" }, brand.name)
-  );
+  const brandMarkup =
+    !!brand &&
+    a(
+      {
+        href: "/",
+        class: stylesheet.shallowSecondaryHeader ? false : "d-lg-none",
+      },
+      brand.logo &&
+        img({
+          src: brand.logo,
+          class: "h-40px",
+          alt: "Logo",
+        }),
+      (stylesheet.brandHasLabel || !brand.logo) &&
+        h2({ class: "logo" }, brand.name)
+    );
   const mkMenuItem = (item) =>
     item.type === "Search"
       ? form(
