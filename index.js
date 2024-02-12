@@ -730,7 +730,9 @@ const layout = (config) => ({
       ?.find((section) => section.isUser)
       ?.items?.[0]?.subitems?.find?.((item) => item.link === "/notifications");
     //console.log("userItem", hasNotifications);
-    const header = config.secondary_menu_header
+    const header = !(brand || menu)
+      ? ""
+      : config.secondary_menu_header
       ? secondaryMenuHeader(
           secondary,
           stylesheet,
@@ -741,6 +743,7 @@ const layout = (config) => ({
           title
         )
       : mobileHeader(stylesheet, brand);
+    console.log({ brand, menu });
     return wrapIt(
       config,
       `id="kt_body" class="${stylesheet.bodyClass}" ${
@@ -753,7 +756,7 @@ const layout = (config) => ({
     <div class="d-flex flex-column flex-root">
       <div class="page d-flex flex-row flex-column-fluid">
         <!-- call the sidebar here-->
-        ${sidebar(brand, primary, currentUrl, stylesheet)}
+        ${brand || menu ? sidebar(brand, primary, currentUrl, stylesheet) : ""}
         <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
           ${header}
           <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="margin-top:0px">
