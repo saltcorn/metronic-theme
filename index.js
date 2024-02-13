@@ -743,7 +743,6 @@ const layout = (config) => ({
           title
         )
       : mobileHeader(stylesheet, brand);
-    console.log({ brand, menu });
     return wrapIt(
       config,
       `id="kt_body" class="${stylesheet.bodyClass}" ${
