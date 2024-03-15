@@ -330,6 +330,9 @@ const wrapIt = (
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700">
     <!-- Vendor Stylesheets -->
 		<!--Global Stylesheets Bundle-->
+		<link href="/plugins/public/metronic-theme${verstring}/${
+  config.stylesheet || "demo9"
+}/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="${
       config.alt_css_file
         ? `/files/serve/${config.alt_css_file}`
