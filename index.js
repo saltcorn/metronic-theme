@@ -57,6 +57,7 @@ const hints = {
       "fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y",
   },
 };
+const isNode = typeof window === "undefined";
 
 const blockDispatch = (config) => ({
   pageHeader: ({ title, blurb }) =>
@@ -323,6 +324,8 @@ const wrapIt = (
 ) => `<!doctype html>
 <html lang="en" ${stylesheet?.htmlAttrs || ""}>
   <head>
+    ${!isNode ? `<base href="http://localhost">` : ""}
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -335,7 +338,9 @@ const wrapIt = (
 }/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="${
       config.alt_css_file
-        ? `/files/serve/${config.alt_css_file}`
+        ? isNode
+          ? `/files/serve/${config.alt_css_file}`
+          : `/plugins/public/metronic-theme${verstring}/${config.alt_css_file}`
         : `/plugins/public/metronic-theme${verstring}/${
             config.stylesheet || "demo9"
           }/assets/css/style.bundle.css`
