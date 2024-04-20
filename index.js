@@ -59,6 +59,11 @@ const hints = {
 };
 const isNode = typeof window === "undefined";
 
+/**
+ * omit '/' in a mobile deployment (needed for ios)
+ */
+const safeSlash = () => (isNode ? "/" : "");
+
 const blockDispatch = (config) => ({
   pageHeader: ({ title, blurb }) =>
     div(
@@ -333,14 +338,14 @@ const wrapIt = (
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700">
     <!-- Vendor Stylesheets -->
 		<!--Global Stylesheets Bundle-->
-		<link href="/plugins/public/metronic-theme${verstring}/${
+		<link href="${safeSlash()}plugins/public/metronic-theme${verstring}/${
   config.stylesheet || "demo9"
 }/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="${
       config.alt_css_file
         ? isNode
           ? `/files/serve/${config.alt_css_file}`
-          : `/plugins/public/metronic-theme${verstring}/${config.alt_css_file}`
+          : `plugins/public/metronic-theme${verstring}/${config.alt_css_file}`
         : `/plugins/public/metronic-theme${verstring}/${
             config.stylesheet || "demo9"
           }/assets/css/style.bundle.css`
@@ -361,9 +366,9 @@ const wrapIt = (
       db.connectObj.version_tag
     }/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="/plugins/public/metronic-theme${verstring}/bootstrap.bundle.min.js"></script>
+    <script src="${safeSlash()}plugins/public/metronic-theme${verstring}/bootstrap.bundle.min.js"></script>
 
-    <script src="/plugins/public/metronic-theme${verstring}/${
+    <script src="${safeSlash()}plugins/public/metronic-theme${verstring}/${
   config.stylesheet || "demo9"
 }/assets/js/scripts.bundle.js"></script>
 
