@@ -57,6 +57,12 @@ const hints = {
       "fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y",
   },
 };
+const isNode = typeof window === "undefined";
+
+/**
+ * omit '/' in a mobile deployment (needed for ios)
+ */
+const safeSlash = () => (isNode ? "/" : "");
 
 const blockDispatch = (config) => ({
   pageHeader: ({ title, blurb }) =>
@@ -323,6 +329,8 @@ const wrapIt = (
 ) => `<!doctype html>
 <html lang="en" ${stylesheet?.htmlAttrs || ""}>
   <head>
+    ${!isNode ? `<base href="http://localhost">` : ""}
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -330,12 +338,14 @@ const wrapIt = (
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700">
     <!-- Vendor Stylesheets -->
 		<!--Global Stylesheets Bundle-->
-		<link href="/plugins/public/metronic-theme${verstring}/${
+		<link href="${safeSlash()}plugins/public/metronic-theme${verstring}/${
   config.stylesheet || "demo9"
 }/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="${
       config.alt_css_file
-        ? `/files/serve/${config.alt_css_file}`
+        ? isNode
+          ? `/files/serve/${config.alt_css_file}`
+          : `plugins/public/metronic-theme${verstring}/${config.alt_css_file}`
         : `/plugins/public/metronic-theme${verstring}/${
             config.stylesheet || "demo9"
           }/assets/css/style.bundle.css`
@@ -356,9 +366,9 @@ const wrapIt = (
       db.connectObj.version_tag
     }/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="/plugins/public/metronic-theme${verstring}/bootstrap.bundle.min.js"></script>
+    <script src="${safeSlash()}plugins/public/metronic-theme${verstring}/bootstrap.bundle.min.js"></script>
 
-    <script src="/plugins/public/metronic-theme${verstring}/${
+    <script src="${safeSlash()}plugins/public/metronic-theme${verstring}/${
   config.stylesheet || "demo9"
 }/assets/js/scripts.bundle.js"></script>
 
@@ -388,7 +398,7 @@ const secondaryMenuHeader = (
     !!brand &&
     a(
       {
-        href: "/",
+        href: isNode ? "/" : "javascript:execLink('/')",
         class: stylesheet.shallowSecondaryHeader ? false : "d-lg-none",
       },
       brand.logo &&
