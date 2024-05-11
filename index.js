@@ -360,7 +360,7 @@ const wrapIt = (
   <body ${bodyAttr}>
     ${body}
     <!-- Change script tags-->
-    <script src="/static_assets/${
+    <script src="${safeSlash()}static_assets/${
       db.connectObj.version_tag
     }/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
