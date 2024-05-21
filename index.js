@@ -755,7 +755,7 @@ const layout = (config) => ({
       : mobileHeader(stylesheet, brand);
     return wrapIt(
       config,
-      `id="kt_body" class="${stylesheet.bodyClass}" ${
+      `id="${stylesheet.bodyId || "kt_body"}" class="${stylesheet.bodyClass}" ${
         stylesheet.bodyAttrs || ""
       }`,
       headers,

@@ -217,6 +217,8 @@
       "menu_item": { "data-kt-enu-placement": "right-start" }
     },
     "bodyClass": "app-default",
+    "bodyAttrs": "data-kt-app-header-fixed=\"true\" data-kt-app-header-fixed-mobile=\"true\" data-kt-app-sidebar-enabled=\"true\" data-kt-app-sidebar-fixed=\"true\" data-kt-app-sidebar-push-header=\"true\" data-kt-app-sidebar-push-toolbar=\"true\" data-kt-app-sidebar-push-footer=\"true\"  class=\"app-default\"",
+    "bodyId": "kt_app_body",
     "menuItemClass": "py-2",
     "menuLinkClass": "",
     "menuItemTrigger": "click",
