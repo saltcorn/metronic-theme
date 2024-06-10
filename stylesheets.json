@@ -179,52 +179,5 @@
     "menuHasArrow": false,
     "menuSubClass": "menu-sub-dropdown menu-sub-indention px-2 py-4 w-250px mh-75 overflow-auto",
     "menuItemTrigger": "{default: 'click', lg: 'hover'}"
-  },
-  "demo42": {
-    "name": "demo42",
-    "label": "Calendar Workspace",
-    "sidebarClass": "pt-7 pb-4 pb-lg-7 pt-lg-17",
-    "attributes": {
-      "kt_aside": {
-        "class": "aside pt-7 pb-4 pb-lg-7 pt-lg-17",
-        "data-kt-drawer-name": "aside",
-        "data-kt-drawer-activate": "{default: true, lg: false}",
-        "data-kt-drawer-overlay": "true",
-        "data-kt-drawer-width": "{default:'200px', '300px': '250px'}",
-        "data-kt-drawer-direction": "start",
-        "data-kt-drawer-toggle": "#kt_aside_toggle"
-      },
-      "kt_aside_logo": {
-        "class": "aside-logo flex-column-auto px-9 mb-9 mb-lg-17 mx-auto"
-      },
-      "kt_aside_menu": {
-        "class": "aside-menu flex-column-fluid ps-3 ps-lg-5 pe-1 mb-9"
-      },
-      "kt_aside_menu_wrapper": {
-        "class": "w-100 hover-scroll-y pe-2 me-2",
-        "data-kt-scroll": "true",
-        "data-kt-scroll-activate": "{default: false, lg: true}",
-        "data-kt-scroll-height": "auto",
-        "data-kt-scroll-dependencies": "#kt_aside_logo, #kt_aside_user, #kt_aside_footer",
-        "data-kt-scroll-wrappers": "#kt_aside, #kt_aside_menu, #kt_aside_menu_wrapper",
-        "data-kt-scroll-offset": "0",
-        "style": "height: 810px;"
-      },
-      "kt_aside_menu1": {
-        "class": "menu menu-column menu-rounded menu-sub-indention fw-semibold",
-        "data-kt-menu": "true"
-      },
-      "menu_item": { "data-kt-enu-placement": "right-start" }
-    },
-    "bodyClass": "app-default",
-    "bodyAttrs": "data-kt-app-header-fixed=\"true\" data-kt-app-header-fixed-mobile=\"true\" data-kt-app-sidebar-enabled=\"true\" data-kt-app-sidebar-fixed=\"true\" data-kt-app-sidebar-push-header=\"true\" data-kt-app-sidebar-push-toolbar=\"true\" data-kt-app-sidebar-push-footer=\"true\"  class=\"app-default\"",
-    "bodyId": "kt_app_body",
-    "menuItemClass": "py-2",
-    "menuLinkClass": "",
-    "menuItemTrigger": "click",
-    "menuHasLabel": true,
-    "brandHasLabel": true,
-    "menuHasArrow": true,
-    "menuSubClass": "menu-sub-accordion"
   }
 }
