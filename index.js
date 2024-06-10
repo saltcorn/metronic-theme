@@ -329,8 +329,6 @@ const wrapIt = (
 ) => `<!doctype html>
 <html lang="en" ${stylesheet?.htmlAttrs || ""}>
   <head>
-    ${!isNode ? `<base href="http://localhost">` : ""}
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -362,7 +360,7 @@ const wrapIt = (
   <body ${bodyAttr}>
     ${body}
     <!-- Change script tags-->
-    <script src="/static_assets/${
+    <script src="${safeSlash()}static_assets/${
       db.connectObj.version_tag
     }/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
