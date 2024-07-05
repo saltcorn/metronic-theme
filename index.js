@@ -354,15 +354,46 @@ const wrapIt = (
     ${headersInHead(headers)}    
     <title>${text(title)}</title>
     <style>h2.logo { color: var(--bs-gray-700); display: inline;margin-left: 10px}</style>
-  
+    ${
+      !isNode
+        ? `
+    <style>
+      .kt-bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #2c3e50;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 0;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+      }
+
+      .kt-bottom-nav a {
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        flex-grow: 1;
+      }
+
+      .kt-bottom-nav i {
+        display: block;
+        font-size: 24px;
+      }
+    </style>`
+        : ""
+    }
   </head>
 
   <body ${bodyAttr}>
     ${body}
     <!-- Change script tags-->
     <script src="${safeSlash()}static_assets/${
-      db.connectObj.version_tag
-    }/jquery-3.6.0.min.js"></script>
+  db.connectObj.version_tag
+}/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="${safeSlash()}plugins/public/metronic-theme${verstring}/bootstrap.bundle.min.js"></script>
 
@@ -625,23 +656,26 @@ const secondaryMenuHeader = (
                 span({ class: "path2" })
               )
             ),
-            div(
-              {
-                class: "d-flex align-items-center d-lg-none me-n2",
-                title: "Show aside menu",
-              },
-              div(
-                {
-                  class: "btn btn-icon btn-active-color-primary w-30px h-30px",
-                  id: "kt_aside_mobile_toggle",
-                },
-                i(
-                  { class: "ki-duotone ki-abstract-14 fs-1" },
-                  span({ class: "path1" }),
-                  span({ class: "path2" })
+            isNode
+              ? div(
+                  {
+                    class: "d-flex align-items-center d-lg-none me-n2",
+                    title: "Show aside menu",
+                  },
+                  div(
+                    {
+                      class:
+                        "btn btn-icon btn-active-color-primary w-30px h-30px",
+                      id: "kt_aside_mobile_toggle",
+                    },
+                    i(
+                      { class: "ki-duotone ki-abstract-14 fs-1" },
+                      span({ class: "path1" }),
+                      span({ class: "path2" })
+                    )
+                  )
                 )
-              )
-            )
+              : ""
           ),
           div({ class: "toolbar d-flex align-items-stretch" }, headerMarkup),
         ]
@@ -650,20 +684,22 @@ const secondaryMenuHeader = (
             class:
               "container-fluid d-flex align-items-stretch justify-content-between",
           },
-          div(
-            {
-              class: "d-flex align-items-center d-lg-none ms-n1 me-2",
-              title: "Show aside menu",
-            },
-            div(
-              {
-                class:
-                  "btn btn-icon btn-active-color-primary w-30px h-30px w-md-40px h-md-40px",
-                id: "kt_aside_mobile_toggle",
-              },
-              i({ class: "ki-outline ki-abstract-14 fs-1" })
-            )
-          ),
+          isNode
+            ? div(
+                {
+                  class: "d-flex align-items-center d-lg-none ms-n1 me-2",
+                  title: "Show aside menu",
+                },
+                div(
+                  {
+                    class:
+                      "btn btn-icon btn-active-color-primary w-30px h-30px w-md-40px h-md-40px",
+                    id: "kt_aside_mobile_toggle",
+                  },
+                  i({ class: "ki-outline ki-abstract-14 fs-1" })
+                )
+              )
+            : "",
           div(
             { class: "d-flex align-items-center flex-grow-1 flex-lg-grow-0" },
             brandMarkup
@@ -715,6 +751,15 @@ const splitPrimarySecondaryMenu = (menu) => {
       .filter(({ items }) => items.length),
   };
 };
+
+const bottomNavBarItem = (item) => item.mobile_item_html || "";
+
+const bottomNavbarSection = (section) =>
+  [...section.items.map(bottomNavBarItem)].join("");
+
+const bottomNavBar = (sections) =>
+  div({ class: "kt-bottom-nav" }, sections.map(bottomNavbarSection));
+
 const layout = (config) => ({
   hints,
   wrap: ({
@@ -763,8 +808,15 @@ const layout = (config) => ({
     <div class="d-flex flex-column flex-root">
       <div class="page d-flex flex-row flex-column-fluid">
         <!-- call the sidebar here-->
-        ${brand || menu ? sidebar(brand, primary, currentUrl, stylesheet) : ""}
-        <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+        ${
+          isNode && (brand || menu)
+            ? sidebar(brand, primary, currentUrl, stylesheet)
+            : ""
+        }
+        <div 
+          class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper"
+          ${!isNode ? 'style="padding-bottom: "60px"' : ""}
+        >
           ${header}
           <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="margin-top:0px">
             <div class="container-xxl" id="kt_content_container">
@@ -774,6 +826,7 @@ const layout = (config) => ({
             </div>
           </div>
         </div>
+        ${!isNode ? bottomNavBar(primary) : ""}
       </div>    
     </div>
     `,
