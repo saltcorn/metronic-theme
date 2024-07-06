@@ -750,7 +750,12 @@ const splitPrimarySecondaryMenu = (menu) => {
   };
 };
 
-const bottomNavBarItem = (item) => item.mobile_item_html || "";
+const bottomNavBarItem = (item) =>
+  item.mobile_item_html ||
+  a(
+    { href: item.link, class: "d-flex flex-column flex-center" },
+    span({ class: "menu-title" }, item.label)
+  );
 
 const bottomNavbarSection = (section) =>
   [...section.items.map(bottomNavBarItem)].join("");
