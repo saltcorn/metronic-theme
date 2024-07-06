@@ -425,7 +425,7 @@ const secondaryMenuHeader = (
     !!brand &&
     a(
       {
-        href: isNode ? "/" : "javascript:execLink('/')",
+        ...(!isNode ? { onclick: "execLink('/')" } : { href: "/" }),
         class: stylesheet.shallowSecondaryHeader ? false : "d-lg-none",
       },
       brand.logo &&
