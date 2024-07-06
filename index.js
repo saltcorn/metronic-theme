@@ -313,6 +313,35 @@ const subItem = (currentUrl) => (item) =>
         )
   );
 
+const bottomNavStyle = `
+    <style>
+      .kt-bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #2c3e50;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 0;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+      }
+
+      .kt-bottom-nav a {
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        flex-grow: 1;
+      }
+
+      .kt-bottom-nav i {
+        display: block;
+        font-size: 24px;
+      }
+    </style>`;
+
 // Helper function to figure out if a menu item is active.
 const active = (currentUrl, item) =>
   (item.link && currentUrl.startsWith(item.link)) ||
@@ -354,38 +383,7 @@ const wrapIt = (
     ${headersInHead(headers)}    
     <title>${text(title)}</title>
     <style>h2.logo { color: var(--bs-gray-700); display: inline;margin-left: 10px}</style>
-    ${
-      !isNode
-        ? `
-    <style>
-      .kt-bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background-color: #2c3e50;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        padding: 10px 0;
-        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
-      }
-
-      .kt-bottom-nav a {
-        color: white;
-        text-align: center;
-        text-decoration: none;
-        flex-grow: 1;
-      }
-
-      .kt-bottom-nav i {
-        display: block;
-        font-size: 24px;
-      }
-    </style>`
-        : ""
-    }
+    ${!isNode ? bottomNavStyle : ""}
   </head>
 
   <body ${bodyAttr}>
