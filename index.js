@@ -215,7 +215,10 @@ const sidebar = (brand, sections, currentUrl, stylesheet) =>
     )*/
   );
 const sideBarSection = (currentUrl, stylesheet) => (section) =>
-  section.items.map(sideBarItem(currentUrl, stylesheet)).join("");
+  section.items
+    .filter((item) => isNode || item.location !== "Mobile Bottom")
+    .map(sideBarItem(currentUrl, stylesheet))
+    .join("");
 
 const sideBarItem = (currentUrl, stylesheet) => (item) => {
   const is_active = active(currentUrl, item);
@@ -326,7 +329,7 @@ const bottomNavStyle = `
         align-items: center;
         padding: 10px 0;
         box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
+        z-index: 998;
       }
 
       .kt-bottom-nav a {
@@ -416,7 +419,8 @@ const secondaryMenuHeader = (
   hasNotifications,
   config,
   user,
-  title
+  title,
+  hasSidebar
 ) => {
   const menuItems = menuSections.map((s) => s.items).flat();
   const menuItemsNoUser = menuItems.filter((item) => !item.isUser);
@@ -654,7 +658,7 @@ const secondaryMenuHeader = (
                 span({ class: "path2" })
               )
             ),
-            isNode
+            hasSidebar
               ? div(
                   {
                     class: "d-flex align-items-center d-lg-none me-n2",
@@ -682,7 +686,7 @@ const secondaryMenuHeader = (
             class:
               "container-fluid d-flex align-items-stretch justify-content-between",
           },
-          isNode
+          hasSidebar
             ? div(
                 {
                   class: "d-flex align-items-center d-lg-none ms-n1 me-2",
@@ -758,7 +762,11 @@ const bottomNavBarItem = (item) =>
   );
 
 const bottomNavbarSection = (section) =>
-  [...section.items.map(bottomNavBarItem)].join("");
+  [
+    ...section.items
+      .filter((item) => item.location === "Mobile Bottom")
+      .map(bottomNavBarItem),
+  ].join("");
 
 const bottomNavBar = (sections) =>
   div({ class: "kt-bottom-nav" }, sections.map(bottomNavbarSection));
@@ -785,6 +793,12 @@ const layout = (config) => ({
     const hasNotifications = menu
       ?.find((section) => section.isUser)
       ?.items?.[0]?.subitems?.find?.((item) => item.link === "/notifications");
+    const hasSidebar =
+      isNode ||
+      primary.some((s) => s.items.some((i) => i.location !== "Mobile Bottom"));
+    const hasBottomNav =
+      !isNode &&
+      primary.some((s) => s.items.some((i) => i.location === "Mobile Bottom"));
     //console.log("userItem", hasNotifications);
     const header = !(brand || menu)
       ? ""
@@ -796,9 +810,11 @@ const layout = (config) => ({
           hasNotifications,
           config,
           req?.user,
-          title
+          title,
+          hasSidebar
         )
       : mobileHeader(stylesheet, brand);
+
     return wrapIt(
       config,
       `id="${stylesheet.bodyId || "kt_body"}" class="${stylesheet.bodyClass}" ${
@@ -812,13 +828,13 @@ const layout = (config) => ({
       <div class="page d-flex flex-row flex-column-fluid">
         <!-- call the sidebar here-->
         ${
-          isNode && (brand || menu)
+          hasSidebar && (brand || menu)
             ? sidebar(brand, primary, currentUrl, stylesheet)
             : ""
         }
         <div 
           class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper"
-          ${!isNode ? 'style="padding-bottom: "60px"' : ""}
+          ${hasBottomNav ? 'style="padding-bottom: "60px"' : ""}
         >
           ${header}
           <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="margin-top:0px">
@@ -829,7 +845,7 @@ const layout = (config) => ({
             </div>
           </div>
         </div>
-        ${!isNode ? bottomNavBar(primary) : ""}
+        ${hasBottomNav ? bottomNavBar(primary) : ""}
       </div>    
     </div>
     `,
