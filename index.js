@@ -1048,4 +1048,5 @@ module.exports = {
   configuration_workflow,
   plugin_name: "metronic-theme",
   fonts: (config) => ({ Inter: "Inter, sans-serif" }),
+  ready_for_mobile: true,
 };
