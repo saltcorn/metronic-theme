@@ -839,7 +839,9 @@ const layout = (config) => ({
           ${header}
           <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="margin-top:0px">
             <div class="container-xxl" id="kt_content_container">
-                <div id="page-inner-content">
+                <div id="page-inner-content" ${
+                  hasBottomNav ? 'style="padding-bottom: 40px;"' : ""
+                }>
                   ${renderBody(title, body, alerts, config, role, req)}
                 </div>
             </div>
