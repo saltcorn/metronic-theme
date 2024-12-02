@@ -59,10 +59,26 @@ const hints = {
 };
 const isNode = typeof window === "undefined";
 
+let hasCapacitor = false;
+try {
+  hasCapacitor =
+    require("@saltcorn/plugins-loader/stable_versioning").isEngineSatisfied(
+      ">1.1.0-beta.11"
+    );
+} catch {
+  getState().log(5, "stable_versioning not available, assuming no Capacitor");
+}
+
 /**
  * omit '/' in a mobile deployment (needed for ios)
  */
 const safeSlash = () => (isNode ? "/" : "");
+
+/**
+ * capacitor uses the plugins folder for cordova legacy plugins
+ */
+const linkPrefix = () =>
+  isNode ? "/plugins" : hasCapacitor ? "sc_plugins" : "plugins";
 
 const blockDispatch = (config) => ({
   pageHeader: ({ title, blurb }) =>
@@ -368,15 +384,15 @@ const wrapIt = (
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700">
     <!-- Vendor Stylesheets -->
 		<!--Global Stylesheets Bundle-->
-		<link href="${safeSlash()}plugins/public/metronic-theme${verstring}/${
+		<link href="${linkPrefix()}/public/metronic-theme${verstring}/${
   config.stylesheet || "demo9"
 }/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="${
       config.alt_css_file
         ? isNode
           ? `/files/serve/${config.alt_css_file}`
-          : `plugins/public/metronic-theme${verstring}/${config.alt_css_file}`
-        : `/plugins/public/metronic-theme${verstring}/${
+          : `sc_plugins/public/metronic-theme${verstring}/${config.alt_css_file}`
+        : `${linkPrefix()}/public/metronic-theme${verstring}/${
             config.stylesheet || "demo9"
           }/assets/css/style.bundle.css`
     }" rel="stylesheet" type="text/css" />
@@ -396,9 +412,9 @@ const wrapIt = (
   db.connectObj.version_tag
 }/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="${safeSlash()}plugins/public/metronic-theme${verstring}/bootstrap.bundle.min.js"></script>
+    <script src="${linkPrefix()}/public/metronic-theme${verstring}/bootstrap.bundle.min.js"></script>
 
-    <script src="${safeSlash()}plugins/public/metronic-theme${verstring}/${
+    <script src="${linkPrefix()}/public/metronic-theme${verstring}/${
   config.stylesheet || "demo9"
 }/assets/js/scripts.bundle.js"></script>
 
