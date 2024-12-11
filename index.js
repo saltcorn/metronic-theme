@@ -63,7 +63,7 @@ let hasCapacitor = false;
 try {
   hasCapacitor =
     require("@saltcorn/plugins-loader/stable_versioning").isEngineSatisfied(
-      ">1.1.0-beta.11"
+      ">=1.1.0-beta.11"
     );
 } catch {
   getState().log(5, "stable_versioning not available, assuming no Capacitor");
