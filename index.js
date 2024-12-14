@@ -20,16 +20,13 @@ const {
   form,
   input,
 } = require("@saltcorn/markup/tags");
-const {
-  navbar,
-  navbarSolidOnScroll,
-} = require("@saltcorn/markup/layout_utils");
 const renderLayout = require("@saltcorn/markup/layout");
 const Field = require("@saltcorn/data/models/field");
 const Table = require("@saltcorn/data/models/table");
 const Form = require("@saltcorn/data/models/form");
 const File = require("@saltcorn/data/models/file");
 const View = require("@saltcorn/data/models/view");
+const { interpolate } = require("@saltcorn/data/utils");
 const db = require("@saltcorn/data/db");
 const Workflow = require("@saltcorn/data/models/workflow");
 const { renderForm, link } = require("@saltcorn/markup");
@@ -37,6 +34,8 @@ const {
   alert,
   headersInHead,
   headersInBody,
+  navbar,
+  navbarSolidOnScroll,
 } = require("@saltcorn/markup/layout_utils");
 const { features } = require("@saltcorn/data/db/state");
 
@@ -770,22 +769,25 @@ const splitPrimarySecondaryMenu = (menu) => {
   };
 };
 
-const bottomNavBarItem = (item) =>
-  item.mobile_item_html ||
-  a(
-    { href: item.link, class: "d-flex flex-column flex-center" },
-    span({ class: "menu-title" }, item.label)
-  );
-
-const bottomNavbarSection = (section) =>
+const bottomNavbarSection = (user, section) =>
   [
     ...section.items
       .filter((item) => item.location === "Mobile Bottom")
-      .map(bottomNavBarItem),
+      .map((item) =>
+        item.mobile_item_html
+          ? interpolate(item.mobile_item_html, {}, user || {})
+          : a(
+              { href: item.link, class: "d-flex flex-column flex-center" },
+              span({ class: "menu-title" }, item.label)
+            )
+      ),
   ].join("");
 
-const bottomNavBar = (sections) =>
-  div({ class: "kt-bottom-nav" }, sections.map(bottomNavbarSection));
+const bottomNavBar = (sections, user) =>
+  div(
+    { class: "kt-bottom-nav" },
+    sections.map(bottomNavbarSection.bind(null, user))
+  );
 
 const layout = (config) => ({
   hints,
@@ -863,7 +865,7 @@ const layout = (config) => ({
             </div>
           </div>
         </div>
-        ${hasBottomNav ? bottomNavBar(primary) : ""}
+        ${hasBottomNav ? bottomNavBar(primary, req?.user) : ""}
       </div>    
     </div>
     `,
