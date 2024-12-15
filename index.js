@@ -840,8 +840,8 @@ const layout = (config) => ({
     const hasBottomNav =
       !isNode &&
       primary.some((s) => s.items.some((i) => i.location === "Mobile Bottom"));
-    if (hasBottomNav) {
-      saltcorn.mobileApp.common.registerScreenOrientationListener(
+    if (hasBottomNav && window?.saltcorn?.mobileApp?.common) {
+      window.saltcorn.mobileApp.common.registerScreenOrientationListener(
         "metronic-theme-listener",
         (event) => {
           const iframe = document.getElementById("content-iframe");
