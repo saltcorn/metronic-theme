@@ -358,6 +358,9 @@ const bottomNavStyle = `
         display: block;
         font-size: 24px;
       }
+      .kt-bottom-nav.landscape i {
+        display: none;
+      }
     </style>`;
 
 // Helper function to figure out if a menu item is active.
@@ -783,9 +786,13 @@ const bottomNavbarSection = (user, section) =>
       ),
   ].join("");
 
-const bottomNavBar = (sections, user) =>
+const bottomNavBar = (sections, orientation, user) =>
   div(
-    { class: "kt-bottom-nav" },
+    {
+      class: `kt-bottom-nav ${
+        orientation?.startsWith("landscape") ? "landscape" : "portrait"
+      }`,
+    },
     sections.map(bottomNavbarSection.bind(null, user))
   );
 
@@ -801,6 +808,7 @@ const layout = (config) => ({
     headers,
     role,
     req,
+    orientation, // only for mobile
   }) => {
     const stylesheet = getStylesheet(config);
     //console.log(menu[1]);
@@ -817,6 +825,25 @@ const layout = (config) => ({
     const hasBottomNav =
       !isNode &&
       primary.some((s) => s.items.some((i) => i.location === "Mobile Bottom"));
+    if (hasBottomNav) {
+      saltcorn.mobileApp.common.registerScreenOrientationListener(
+        "metronic-theme-listener",
+        (event) => {
+          const iframe = document.getElementById("content-iframe");
+          if (iframe) {
+            const bottomNav = iframe.contentWindow.$(".kt-bottom-nav");
+            if (event.type?.startsWith("landscape")) {
+              bottomNav.removeClass("portrait");
+              bottomNav.addClass("landscape");
+            } else if (event.type?.startsWith("portrait")) {
+              bottomNav.removeClass("landscape");
+              bottomNav.addClass("portrait");
+            }
+          }
+        }
+      );
+    }
+
     //console.log("userItem", hasNotifications);
     const header = !(brand || menu)
       ? ""
@@ -865,7 +892,7 @@ const layout = (config) => ({
             </div>
           </div>
         </div>
-        ${hasBottomNav ? bottomNavBar(primary, req?.user) : ""}
+        ${hasBottomNav ? bottomNavBar(primary, orientation, req?.user) : ""}
       </div>    
     </div>
     `,
