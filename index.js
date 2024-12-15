@@ -331,7 +331,7 @@ const subItem = (currentUrl) => (item) =>
         )
   );
 
-const bottomNavStyle = `
+const bottomNavStyle = (orientation) => `
     <style>
       .kt-bottom-nav {
         position: fixed;
@@ -342,7 +342,7 @@ const bottomNavStyle = `
         display: flex;
         justify-content: space-around;
         align-items: center;
-        padding: 10px 0;
+        padding: 6px 0;
         box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
         z-index: 998;
       }
@@ -360,6 +360,22 @@ const bottomNavStyle = `
       }
       .kt-bottom-nav.landscape i {
         display: none;
+      }
+
+      .mobile-toast-margin {
+        ${
+          orientation?.startsWith("landscape")
+            ? "margin-bottom: 3rem"
+            : "margin-bottom: 5rem;"
+        }
+      }
+
+      .mobile-toast-margin-landscape {
+        margin-bottom: 3rem;
+      }
+
+      .mobile-toast-margin-portrait {
+        margin-bottom: 5rem;
       }
     </style>`;
 
@@ -404,7 +420,6 @@ const wrapIt = (
     ${headersInHead(headers)}    
     <title>${text(title)}</title>
     <style>h2.logo { color: var(--bs-gray-700); display: inline;margin-left: 10px}</style>
-    ${!isNode ? bottomNavStyle : ""}
   </head>
 
   <body ${bodyAttr}>
@@ -832,12 +847,21 @@ const layout = (config) => ({
           const iframe = document.getElementById("content-iframe");
           if (iframe) {
             const bottomNav = iframe.contentWindow.$(".kt-bottom-nav");
+            const toasts = iframe.contentWindow.$(".toast-container");
             if (event.type?.startsWith("landscape")) {
               bottomNav.removeClass("portrait");
               bottomNav.addClass("landscape");
+              toasts.addClass("mobile-toast-margin-landscape");
+              toasts.removeClass(
+                "mobile-toast-margin-portrait mobile-toast-margin"
+              );
             } else if (event.type?.startsWith("portrait")) {
               bottomNav.removeClass("landscape");
               bottomNav.addClass("portrait");
+              toasts.addClass("mobile-toast-margin-portrait");
+              toasts.removeClass(
+                "mobile-toast-margin-landscape mobile-toast-margin"
+              );
             }
           }
         }
@@ -895,6 +919,7 @@ const layout = (config) => ({
         ${hasBottomNav ? bottomNavBar(primary, orientation, req?.user) : ""}
       </div>    
     </div>
+    ${hasBottomNav ? bottomNavStyle(orientation) : ""} 
     `,
       stylesheet
     );
