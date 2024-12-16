@@ -20,16 +20,13 @@ const {
   form,
   input,
 } = require("@saltcorn/markup/tags");
-const {
-  navbar,
-  navbarSolidOnScroll,
-} = require("@saltcorn/markup/layout_utils");
 const renderLayout = require("@saltcorn/markup/layout");
 const Field = require("@saltcorn/data/models/field");
 const Table = require("@saltcorn/data/models/table");
 const Form = require("@saltcorn/data/models/form");
 const File = require("@saltcorn/data/models/file");
 const View = require("@saltcorn/data/models/view");
+const { interpolate } = require("@saltcorn/data/utils");
 const db = require("@saltcorn/data/db");
 const Workflow = require("@saltcorn/data/models/workflow");
 const { renderForm, link } = require("@saltcorn/markup");
@@ -37,6 +34,8 @@ const {
   alert,
   headersInHead,
   headersInBody,
+  navbar,
+  navbarSolidOnScroll,
 } = require("@saltcorn/markup/layout_utils");
 const { features } = require("@saltcorn/data/db/state");
 
@@ -59,10 +58,26 @@ const hints = {
 };
 const isNode = typeof window === "undefined";
 
+let hasCapacitor = false;
+try {
+  hasCapacitor =
+    require("@saltcorn/plugins-loader/stable_versioning").isEngineSatisfied(
+      ">=1.1.0-beta.11"
+    );
+} catch {
+  getState().log(5, "stable_versioning not available, assuming no Capacitor");
+}
+
 /**
  * omit '/' in a mobile deployment (needed for ios)
  */
 const safeSlash = () => (isNode ? "/" : "");
+
+/**
+ * capacitor uses the plugins folder for cordova legacy plugins
+ */
+const linkPrefix = () =>
+  isNode ? "/plugins" : hasCapacitor ? "sc_plugins" : "plugins";
 
 const blockDispatch = (config) => ({
   pageHeader: ({ title, blurb }) =>
@@ -316,7 +331,7 @@ const subItem = (currentUrl) => (item) =>
         )
   );
 
-const bottomNavStyle = `
+const bottomNavStyle = (orientation) => `
     <style>
       .kt-bottom-nav {
         position: fixed;
@@ -327,7 +342,7 @@ const bottomNavStyle = `
         display: flex;
         justify-content: space-around;
         align-items: center;
-        padding: 10px 0;
+        padding: 6px 0;
         box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
         z-index: 998;
       }
@@ -342,6 +357,25 @@ const bottomNavStyle = `
       .kt-bottom-nav i {
         display: block;
         font-size: 24px;
+      }
+      .kt-bottom-nav.landscape i {
+        display: none;
+      }
+
+      .mobile-toast-margin {
+        ${
+          orientation?.startsWith("landscape")
+            ? "margin-bottom: 3rem"
+            : "margin-bottom: 5rem;"
+        }
+      }
+
+      .mobile-toast-margin-landscape {
+        margin-bottom: 3rem;
+      }
+
+      .mobile-toast-margin-portrait {
+        margin-bottom: 5rem;
       }
     </style>`;
 
@@ -368,15 +402,15 @@ const wrapIt = (
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700">
     <!-- Vendor Stylesheets -->
 		<!--Global Stylesheets Bundle-->
-		<link href="${safeSlash()}plugins/public/metronic-theme${verstring}/${
+		<link href="${linkPrefix()}/public/metronic-theme${verstring}/${
   config.stylesheet || "demo9"
 }/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="${
       config.alt_css_file
         ? isNode
           ? `/files/serve/${config.alt_css_file}`
-          : `plugins/public/metronic-theme${verstring}/${config.alt_css_file}`
-        : `/plugins/public/metronic-theme${verstring}/${
+          : `sc_plugins/public/metronic-theme${verstring}/${config.alt_css_file}`
+        : `${linkPrefix()}/public/metronic-theme${verstring}/${
             config.stylesheet || "demo9"
           }/assets/css/style.bundle.css`
     }" rel="stylesheet" type="text/css" />
@@ -386,7 +420,6 @@ const wrapIt = (
     ${headersInHead(headers)}    
     <title>${text(title)}</title>
     <style>h2.logo { color: var(--bs-gray-700); display: inline;margin-left: 10px}</style>
-    ${!isNode ? bottomNavStyle : ""}
   </head>
 
   <body ${bodyAttr}>
@@ -396,9 +429,9 @@ const wrapIt = (
   db.connectObj.version_tag
 }/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="${safeSlash()}plugins/public/metronic-theme${verstring}/bootstrap.bundle.min.js"></script>
+    <script src="${linkPrefix()}/public/metronic-theme${verstring}/bootstrap.bundle.min.js"></script>
 
-    <script src="${safeSlash()}plugins/public/metronic-theme${verstring}/${
+    <script src="${linkPrefix()}/public/metronic-theme${verstring}/${
   config.stylesheet || "demo9"
 }/assets/js/scripts.bundle.js"></script>
 
@@ -754,22 +787,29 @@ const splitPrimarySecondaryMenu = (menu) => {
   };
 };
 
-const bottomNavBarItem = (item) =>
-  item.mobile_item_html ||
-  a(
-    { href: item.link, class: "d-flex flex-column flex-center" },
-    span({ class: "menu-title" }, item.label)
-  );
-
-const bottomNavbarSection = (section) =>
+const bottomNavbarSection = (user, section) =>
   [
     ...section.items
       .filter((item) => item.location === "Mobile Bottom")
-      .map(bottomNavBarItem),
+      .map((item) =>
+        item.mobile_item_html
+          ? interpolate(item.mobile_item_html, {}, user || {})
+          : a(
+              { href: item.link, class: "d-flex flex-column flex-center" },
+              span({ class: "menu-title" }, item.label)
+            )
+      ),
   ].join("");
 
-const bottomNavBar = (sections) =>
-  div({ class: "kt-bottom-nav" }, sections.map(bottomNavbarSection));
+const bottomNavBar = (sections, orientation, user) =>
+  div(
+    {
+      class: `kt-bottom-nav ${
+        orientation?.startsWith("landscape") ? "landscape" : "portrait"
+      }`,
+    },
+    sections.map(bottomNavbarSection.bind(null, user))
+  );
 
 const layout = (config) => ({
   hints,
@@ -783,6 +823,7 @@ const layout = (config) => ({
     headers,
     role,
     req,
+    orientation, // only for mobile
   }) => {
     const stylesheet = getStylesheet(config);
     //console.log(menu[1]);
@@ -799,6 +840,34 @@ const layout = (config) => ({
     const hasBottomNav =
       !isNode &&
       primary.some((s) => s.items.some((i) => i.location === "Mobile Bottom"));
+    if (hasBottomNav && window?.saltcorn?.mobileApp?.common) {
+      window.saltcorn.mobileApp.common.registerScreenOrientationListener(
+        "metronic-theme-listener",
+        (event) => {
+          const iframe = document.getElementById("content-iframe");
+          if (iframe) {
+            const bottomNav = iframe.contentWindow.$(".kt-bottom-nav");
+            const toasts = iframe.contentWindow.$(".toast-container");
+            if (event.type?.startsWith("landscape")) {
+              bottomNav.removeClass("portrait");
+              bottomNav.addClass("landscape");
+              toasts.addClass("mobile-toast-margin-landscape");
+              toasts.removeClass(
+                "mobile-toast-margin-portrait mobile-toast-margin"
+              );
+            } else if (event.type?.startsWith("portrait")) {
+              bottomNav.removeClass("landscape");
+              bottomNav.addClass("portrait");
+              toasts.addClass("mobile-toast-margin-portrait");
+              toasts.removeClass(
+                "mobile-toast-margin-landscape mobile-toast-margin"
+              );
+            }
+          }
+        }
+      );
+    }
+
     //console.log("userItem", hasNotifications);
     const header = !(brand || menu)
       ? ""
@@ -847,9 +916,10 @@ const layout = (config) => ({
             </div>
           </div>
         </div>
-        ${hasBottomNav ? bottomNavBar(primary) : ""}
+        ${hasBottomNav ? bottomNavBar(primary, orientation, req?.user) : ""}
       </div>    
     </div>
+    ${hasBottomNav ? bottomNavStyle(orientation) : ""} 
     `,
       stylesheet
     );
