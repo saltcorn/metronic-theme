@@ -261,6 +261,14 @@ const sideBarItem = (currentUrl, stylesheet) => (item) => {
 
               is_active && "active",
             ],
+            ...(item.tooltip
+              ? {
+                  "data-bs-toggle": "tooltip",
+                  "data-bs-placement": "right",
+                  "data-bs-dismiss": "click",
+                  title: item.tooltip,
+                }
+              : {}),
             href: text(item.link),
             target: item.target_blank ? "_blank" : undefined,
           },
@@ -316,6 +324,14 @@ const subItem = (currentUrl) => (item) =>
             ],
             target: item.target_blank ? "_blank" : undefined,
             href: text(item.link),
+            ...(item.tooltip
+              ? {
+                  "data-bs-toggle": "tooltip",
+                  "data-bs-placement": "right",
+                  "data-bs-dismiss": "click",
+                  title: item.tooltip,
+                }
+              : {}),
           },
           item.icon
             ? i({ class: `menu-icon ${item.icon}` })
