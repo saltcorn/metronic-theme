@@ -1,6 +1,6 @@
 {
   "name": "@saltcorn/metronic-theme",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Metronic theme for Saltcorn",
   "main": "index.js",
   "scripts": {
